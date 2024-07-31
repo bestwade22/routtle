@@ -1,15 +1,8 @@
-
-import ButtonAppBar from './components/header';
-import DynamicTabs from './components/tabs';
+import PageRouter from '@/routes/PageRouter';
+import Home from '@/pages/Home';
 
 function App() {
-  return (
-    <>
-      <ButtonAppBar />
-      <DynamicTabs />
-
-    </>
-  );
+  return <><Home /></>;
 }
 
 export default App;

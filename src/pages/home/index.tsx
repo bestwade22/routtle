@@ -1,13 +1,17 @@
-import ButtonAppBar from 'components/header';
-import DynamicTabs from 'components/tabs';
+import React from 'react';
+import ButtonAppBar from '@/components/Header';
+import RouletteTable from '@/components/RouletteTable';
+import DynamicTabs from '@/components/Tabs';
 
-function home() {
+function Home() {
   return (
     <>
       <ButtonAppBar />
-      <DynamicTabs />
+      <DynamicTabs>
+        <RouletteTable />
+      </DynamicTabs> 
     </>
   );
 }
 
-export default home;
+export default Home;

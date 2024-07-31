@@ -1,5 +1,5 @@
 // src/Tabs.tsx
-import React, { useState } from 'react';
+import React, { Children, ReactNode, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Box } from '@mui/material';
@@ -8,13 +8,15 @@ import { useTheme } from '@mui/material/styles';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+// import RouletteTable from 'components/rouletteTable';
 
 interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
+  children?: ReactNode | undefined;
+  // index: number;
 }
 
-export default function DynamicTabs() {
+export default function DynamicTabs(props: TabPanelProps) {
+  const { children } = props;
   const [tabs, setTabs] = useState<{ id: number; label: string }[]>([
     { id: 0, label: 'Tab 1' },
   ]);
@@ -53,7 +55,7 @@ export default function DynamicTabs() {
             aria-label="lab API tabs example"
           >
             {tabs.map((tab) => (
-              <Tab value={tab.id.toString()} label={tab.label} />
+              <Tab key={tab.label} value={tab.id.toString()} label={tab.label} />
             ))}
             <Tab onClick={handleAddTab} label="Add Tab" />
           </TabList>
@@ -64,9 +66,10 @@ export default function DynamicTabs() {
           onChangeIndex={handleChangeIndex}
         ></SwipeableViews> */}
         {tabs.map((tab) => (
-          <TabPanel value={tab.id.toString()}>
+          <TabPanel key={tab.label} value={tab.id.toString()}>
             {tab.label}
             <button onClick={() => handleRemoveTab(tab.id)}>Remove Tab</button>
+            <div>{children}</div>
           </TabPanel>
         ))}
       </TabContext>

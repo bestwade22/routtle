@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useReducer } from 'react';
-
+interface rouletteTable {
+  id: number;
+  title: string;
+  numbers: number[];
+  lastNumber: number | null;
+}
 interface RouletteState {
-  rouletteTables: {
-    [key: string]: {
-      numbers: number[];
-      lastNumber: number | null;
-    };
-  };
+  rouletteTables: rouletteTable[];
 }
 interface Props {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ const RouletteContext = createContext<{
   dispatch: React.Dispatch<any>;
 }>({
   state: {
-    rouletteTables: {},
+    rouletteTables: [],
   },
   dispatch: () => {},
 });
@@ -25,34 +25,36 @@ export const useRouletteContext = () => useContext(RouletteContext);
 
 const rouletteReducer = (state: RouletteState, action: any) => {
   switch (action.type) {
-    case 'ADD_ROULETTE':
-      const id = `roulette_${Date.now()}`;
+    case 'ADD_ROULETTE_TABLE':
+      const payload = action.payload;
+      return {
+        ...state,
+        rouletteTables: [...state.rouletteTables, payload],
+      };
+    case 'REMOVE_ROULETTE_TABLE':
+      var filteredTable = state.rouletteTables.filter(function (item) {
+        return item.id !== action.payload.id;
+      });
       return {
         ...state,
         rouletteTables: {
           ...state.rouletteTables,
-          [id]: {
-            numbers: [],
-            lastNumber: null,
-          },
+          ...filteredTable,
         },
       };
 
     case 'ENTER_NUMBER':
-      const { rouletteId, number } = action.payload;
-      const rouletteTable = state.rouletteTables[rouletteId];
-      const updatedNumbers = [...rouletteTable.numbers, number];
+      const { id, number } = action.payload;
+      const rouletteTables = state.rouletteTables;
+      const tableIndex = state.rouletteTables.findIndex(
+        (item) => item.id == id
+      );
+      const numbers = rouletteTables[tableIndex].numbers;
+      rouletteTables[tableIndex].numbers = [...numbers, number];
 
       return {
         ...state,
-        rouletteTables: {
-          ...state.rouletteTables,
-          [rouletteId]: {
-            ...rouletteTable,
-            numbers: updatedNumbers,
-            lastNumber: number,
-          },
-        },
+        rouletteTables: [...rouletteTables],
       };
 
     default:
@@ -61,7 +63,7 @@ const rouletteReducer = (state: RouletteState, action: any) => {
 };
 
 const initialState: RouletteState = {
-  rouletteTables: {},
+  rouletteTables: [],
 };
 
 export const RouletteProvider: React.FC<Props> = (props) => {
