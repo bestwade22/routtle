@@ -1,8 +1,14 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
+
+interface recordType {
+  num: number;
+  color: string;
+}
 interface rouletteTable {
   id: number;
   title: string;
-  numbers: number[];
+  record: recordType[];
+  numberRecord: number[];
   lastNumber: number | null;
 }
 interface RouletteState {
@@ -11,19 +17,31 @@ interface RouletteState {
 interface Props {
   children: React.ReactNode;
 }
+
+export const initialState: RouletteState = {
+  rouletteTables: [
+    {
+      id: 1,
+      title: 'Table 1',
+      record: [],
+      numberRecord: [],
+      lastNumber: null,
+    },
+  ],
+};
+
 const RouletteContext = createContext<{
   state: RouletteState;
   dispatch: React.Dispatch<any>;
 }>({
-  state: {
-    rouletteTables: [],
-  },
+  state: initialState,
   dispatch: () => {},
 });
 
 export const useRouletteContext = () => useContext(RouletteContext);
 
 const rouletteReducer = (state: RouletteState, action: any) => {
+  const rouletteTables = state.rouletteTables;
   switch (action.type) {
     case 'ADD_ROULETTE_TABLE':
       const payload = action.payload;
@@ -37,24 +55,39 @@ const rouletteReducer = (state: RouletteState, action: any) => {
       });
       return {
         ...state,
-        rouletteTables: {
-          ...state.rouletteTables,
+        rouletteTables: [
+          //...state.rouletteTables,
           ...filteredTable,
-        },
+        ],
       };
 
-    case 'ENTER_NUMBER':
-      const { id, number } = action.payload;
-      const rouletteTables = state.rouletteTables;
-      const tableIndex = state.rouletteTables.findIndex(
-        (item) => item.id == id
-      );
-      const numbers = rouletteTables[tableIndex].numbers;
-      rouletteTables[tableIndex].numbers = [...numbers, number];
-
+    case 'ENTER_RECORD':
+      const { tableId, recordItem } = action.payload;
+      const tableIndex = rouletteTables
+        .map((table) => table.id)
+        .indexOf(tableId);
+      const record = rouletteTables[tableIndex].record;
+      const numberRecord = rouletteTables[tableIndex].numberRecord;
+      rouletteTables[tableIndex].record = [...record, recordItem];
+      console.log(tableIndex)
+      console.log(numberRecord)
+      rouletteTables[tableIndex].numberRecord = [
+        ...numberRecord,
+        recordItem.num,
+      ];
       return {
         ...state,
-        rouletteTables: [...rouletteTables],
+        rouletteTables: rouletteTables,
+      };
+    case 'DELETE_RECORD':
+      const index = rouletteTables
+        .map((table) => table.id)
+        .indexOf(action.payload.tableId);
+      rouletteTables[index].record.pop();
+      rouletteTables[index].numberRecord.pop();
+      return {
+        ...state,
+        rouletteTables: rouletteTables,
       };
 
     default:
@@ -62,13 +95,15 @@ const rouletteReducer = (state: RouletteState, action: any) => {
   }
 };
 
-const initialState: RouletteState = {
-  rouletteTables: [],
-};
-
 export const RouletteProvider: React.FC<Props> = (props) => {
   const [state, dispatch] = useReducer(rouletteReducer, initialState);
   const { children } = props;
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      console.log('State managed by useReducer:', state);
+    }
+  }, [state]);
+
   return (
     <RouletteContext.Provider value={{ state, dispatch }}>
       {children}

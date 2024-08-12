@@ -1,13 +1,22 @@
 // src/Tabs.tsx
-import React, { Children, ReactNode, useState } from 'react';
+import React, {
+  Children,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { Box } from '@mui/material';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
+import { Box, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { useRouletteContext } from '@/contexts/RouletteContext';
+import RecordList from '../RecordList';
+import RouletteTable from '../RouletteTable';
 // import RouletteTable from 'components/rouletteTable';
 
 interface TabPanelProps {
@@ -17,33 +26,60 @@ interface TabPanelProps {
 
 export default function DynamicTabs(props: TabPanelProps) {
   const { children } = props;
-  const [tabs, setTabs] = useState<{ id: number; label: string }[]>([
-    { id: 0, label: 'Tab 1' },
-  ]);
-  const [value, setValue] = useState('0');
-  const theme = useTheme();
+  const [value, setValue] = useState('1');
+  const [isAddRecord, setIsAddRecord] = useState(false);
+  const { state, dispatch } = useRouletteContext();
+  const rouletteTablesState = state.rouletteTables;
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    event.preventDefault;
     setValue(newValue);
   };
 
   const handleAddTab = () => {
-    const newTabId = tabs.length + 1;
-    setTabs((prevTabs) => [
-      ...prevTabs,
-      { id: newTabId, label: `Tab ${newTabId}` },
-    ]);
-    setValue(newTabId.toString());
+    const lastTableIndex = rouletteTablesState.length - 1;
+    const newTableId = rouletteTablesState[lastTableIndex].id + 1;
+    dispatch({
+      type: 'ADD_ROULETTE_TABLE',
+      payload: {
+        id: newTableId,
+        title: `Table ${newTableId}`,
+        numberRecord: [],
+        record: [],
+        lastNumber: null,
+      },
+    });
+    setValue(newTableId.toString());
   };
 
-  const handleRemoveTab = (tabId: number) => {
-    setTabs((prevTabs) => prevTabs.filter((tab) => tab.id !== tabId));
-    setValue(
-      Math.max(0, tabs.findIndex((tab) => tab.id === tabId) - 1).toString()
-    );
+  const handleRemoveTab = (tableId: number) => {
+    console.log(tableId);
+    dispatch({
+      type: 'REMOVE_ROULETTE_TABLE',
+      payload: {
+        id: tableId,
+      },
+    });
+    if (value === tableId.toString()) {
+      setValue(rouletteTablesState[0].id.toString());
+    }
   };
-  const handleChangeIndex = (index: number) => {
-    setValue(index.toString());
-  };
+  const renderRouletteTable = useCallback(
+    (tableId: number) => (
+      <RouletteTable tableId={tableId} isAddRecord={isAddRecord} />
+    ),
+    [isAddRecord]
+  );
+  const renderRecordList = useCallback(
+    (tableId: number) => (
+      <RecordList
+        tableId={tableId}
+        isAddRecord={isAddRecord}
+        setIsAddRecord={setIsAddRecord}
+      />
+    ),
+    [isAddRecord]
+  );
+
   return (
     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <TabContext value={value}>
@@ -54,22 +90,36 @@ export default function DynamicTabs(props: TabPanelProps) {
             scrollButtons="auto"
             aria-label="lab API tabs example"
           >
-            {tabs.map((tab) => (
-              <Tab key={tab.label} value={tab.id.toString()} label={tab.label} />
+            {rouletteTablesState.map((table) => (
+              <Tab
+                key={table.id}
+                value={table.id.toString()}
+                label={
+                  <Box display="flex" alignItems="center">
+                    {table.title}
+                    <IconButton
+                      size="small"
+                      component="span"
+                      onClick={(e) => {
+                        handleRemoveTab(table.id);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                }
+              />
             ))}
-            <Tab onClick={handleAddTab} label="Add Tab" />
+            <Tab onClick={handleAddTab} label="Add Tab" value={'remove'} />
           </TabList>
         </Box>
-        {/* <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={parseInt(value)}
-          onChangeIndex={handleChangeIndex}
-        ></SwipeableViews> */}
-        {tabs.map((tab) => (
-          <TabPanel key={tab.label} value={tab.id.toString()}>
-            {tab.label}
-            <button onClick={() => handleRemoveTab(tab.id)}>Remove Tab</button>
-            <div>{children}</div>
+        {rouletteTablesState.map((table) => (
+          <TabPanel key={table.id} value={table.id.toString()}>
+            <Box>
+              {renderRecordList(table.id)}
+              {renderRouletteTable(table.id)}
+            </Box>
           </TabPanel>
         ))}
       </TabContext>
