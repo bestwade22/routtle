@@ -4,7 +4,7 @@ type CustomGridType = {
   list: any;
   cols?: number;
   column?: boolean;
-  renderContent?: (data: any) => JSX.Element;
+  renderContent?: (data: any, index: number) => JSX.Element;
 };
 const CustomGrid = (props: CustomGridType) => {
   const { list, cols, column = false, renderContent } = props;
@@ -27,8 +27,9 @@ const CustomGrid = (props: CustomGridType) => {
             alignItems="center"
             justifyContent="center"
             key={index}
+            width={'100%'}
           >
-            {renderContent && renderContent(data)}
+            {renderContent && renderContent(data, index)}
             {/* <Box
                 height="100%"
                 display="flex"

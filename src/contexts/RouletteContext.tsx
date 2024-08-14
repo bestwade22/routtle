@@ -69,8 +69,6 @@ const rouletteReducer = (state: RouletteState, action: any) => {
       const record = rouletteTables[tableIndex].record;
       const numberRecord = rouletteTables[tableIndex].numberRecord;
       rouletteTables[tableIndex].record = [...record, recordItem];
-      console.log(tableIndex)
-      console.log(numberRecord)
       rouletteTables[tableIndex].numberRecord = [
         ...numberRecord,
         recordItem.num,
