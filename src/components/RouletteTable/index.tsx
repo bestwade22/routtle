@@ -9,8 +9,9 @@ import {
 import CustomGrid from './CustomGrid';
 import NumberBox from './NumberBox';
 import { useRouletteContext } from '@/contexts/RouletteContext';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import BetBox from './BetBox';
+import { recordCount, betsCount, twoToOneBetsCount } from '@/utils/count';
 
 type RouletteTablePropType = {
   tableId: number;
@@ -21,8 +22,21 @@ export default function RouletteTable(props: RouletteTablePropType) {
   const { tableId, isAddRecord = false } = props;
   const { state, dispatch } = useRouletteContext();
 
+  const rouletteTableState = state.rouletteTables.find(
+    (item) => item.id === tableId
+  );
+  const numberRecordState = rouletteTableState?.numberRecord;
+
+  // const { countState, setCountState }: any = useState(
+  //   recordCount(numberRecordState)
+  // );
+  const betCount = recordCount(numberRecordState);
+  const twoToOneCounts = twoToOneBetsCount(numberRecordState);
+  console.log(twoToOneCounts);
+
   const renderNumber = useCallback(
-    (data: any, index?: number) => {
+    (data: any, index: number) => {
+      const numCountIdx = data.num === 0 ? 0 : index + 1;
       const handleAddRecord = () => {
         if (isAddRecord) {
           dispatch({
@@ -36,48 +50,90 @@ export default function RouletteTable(props: RouletteTablePropType) {
           num={data.num}
           color={data.color}
           handleAddRecord={handleAddRecord}
+          count={betCount?.numberCount[numCountIdx]}
         />
       );
     },
-    [isAddRecord]
+    [isAddRecord, betCount]
   );
-  const renderTwelveNum = useCallback((data: any, index?: number) => {
-    let title = '';
-    switch (index) {
-      case 0:
-        title = '1st dozens';
-        break;
-      case 1:
-        title = '2nd dozens';
-        break;
-      case 2:
-        title = '3rd dozens';
-        break;
-      default:
-        break;
-    }
-    return <BetBox title={title} count={1} />;
-  }, []);
+  const renderTwelveNum = useCallback(
+    (data: any, index: number) => {
+      let title = '';
+      const count = betCount['twelveNumbers'];
+      switch (index) {
+        case 0:
+          title = '1st dozens';
+          break;
+        case 1:
+          title = '2nd dozens';
+          break;
+        case 2:
+          title = '3rd dozens';
+          break;
+        default:
+          break;
+      }
+      return <BetBox title={title} count={count[index]} />;
+    },
+    [betCount]
+  );
 
-  const renderLineNum = useCallback((data: any, index: number) => {
-    let title = `line ${index + 1}`;
-    return <BetBox title={title} count={1} />;
-  }, []);
+  const renderLineNum = useCallback(
+    (data: any, index: number) => {
+      let title = `line ${index + 1}`;
+      const count = betCount['lineNumbers'];
+      return <BetBox title={title} count={count[index]} />;
+    },
+    [betCount]
+  );
 
-  const renderStreetNum = useCallback((data: any, index: number) => {
-    let title = `str ${index + 1}`;
-    return <BetBox title={title} ncount={1} />;
-  }, []);
-  const renderColNum = useCallback((data: any, index: number) => {
-    let title = `Col ${index + 1}`;
-    return <BetBox title={title} count={1} />;
-  }, []);
+  const renderStreetNum = useCallback(
+    (data: any, index: number) => {
+      let title = `str ${index + 1}`;
+      const count = betCount['streetNumbers'];
+      return <BetBox title={title} count={count[index]} />;
+    },
+    [betCount]
+  );
+  const renderColNum = useCallback(
+    (data: any, index: number) => {
+      let title = `Col ${index + 1}`;
+      const count = betCount['columnNumbers'];
+      return <BetBox title={title} count={count[index]} />;
+    },
+    [betCount]
+  );
   const renderRedBlackBet = useCallback(
     (title: string, bgColor: string) => {
-      return <BetBox title={title} count={1} bgColor={bgColor}/>;
+      const count = twoToOneCounts.redBlackBet;
+      const index = title === 'Red' ? 0 : 1;
+      return <BetBox title={title} count={count[index]} bgColor={bgColor} />;
     },
-    []
+    [twoToOneCounts]
   );
+  const renderOddEvenBet = useCallback(
+    (title: string) => {
+      const count = twoToOneCounts.oddEvenBet;
+      const index = title === 'Odd' ? 0 : 1;
+      return <BetBox title={title} count={count[index]} />;
+    },
+    [twoToOneCounts]
+  );
+  const renderEighteenNumBet = useCallback(
+    (title: string) => {
+      const count = twoToOneCounts.eighteenNumBet;
+      const index = title === '1 to 18' ? 0 : 1;
+      return <BetBox title={title} count={count[index]} />;
+    },
+    [twoToOneCounts]
+  );
+
+  // useEffect(() => {
+  //   setCountState(recordCount(numberRecordState));
+
+  //   return () => {};
+  // }, [numberRecordState]);
+
   return (
     <>
       <Grid container spacing={0}>
@@ -85,7 +141,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
           <Grid container spacing={0}>
             <Grid item xs={4}></Grid>
             <Grid item xs={6}>
-              {renderNumber({ num: 0, color: 'green' })}
+              {renderNumber({ num: 0, color: 'green' }, 0)}
             </Grid>
             <Grid item xs={2}></Grid>
           </Grid>
@@ -129,13 +185,24 @@ export default function RouletteTable(props: RouletteTablePropType) {
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={0}>
-            <Grid item xs={2}>{renderRedBlackBet('Red', 'red')}</Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={2}>{renderRedBlackBet('Black', 'black')}</Grid>
-
+            <Grid item xs={2}>
+              {renderEighteenNumBet('1 to 18')}
+            </Grid>
+            <Grid item xs={2}>
+              {renderOddEvenBet('Odd')}
+            </Grid>
+            <Grid item xs={2}>
+              {renderRedBlackBet('Red', 'red')}
+            </Grid>
+            <Grid item xs={2}>
+              {renderRedBlackBet('Black', 'black')}
+            </Grid>
+            <Grid item xs={2}>
+              {renderOddEvenBet('Event')}
+            </Grid>
+            <Grid item xs={2}>
+              {renderEighteenNumBet('19 to 36')}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

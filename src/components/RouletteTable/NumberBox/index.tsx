@@ -1,12 +1,13 @@
 import { Box } from '@mui/material';
 
-interface NumberBoxPropsType  {
+interface NumberBoxPropsType {
   handleAddRecord: Function;
   num: number;
+  count?: number;
   color: string;
 }
 function NumberBox(props: NumberBoxPropsType) {
-  const { num, color, handleAddRecord } = props;
+  const { num, color, handleAddRecord, count = 0 } = props;
   const addRecord = () => {
     console.log(num);
   };
@@ -24,6 +25,7 @@ function NumberBox(props: NumberBoxPropsType) {
       onClick={() => handleAddRecord()}
     >
       {num}
+      {` (${count})`}
     </Box>
   );
 }

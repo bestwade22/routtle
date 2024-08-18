@@ -68,3 +68,13 @@ export const streetNumbers = [
   [31, 32, 33],
   [34, 35, 36],
 ];
+
+export const staticNumbers: {
+  [key: string]: any;
+} = {
+  rouletteNumbers,
+  columnNumbers,
+  twelveNumbers,
+  streetNumbers,
+  lineNumbers,
+};

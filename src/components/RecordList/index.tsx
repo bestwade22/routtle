@@ -31,7 +31,7 @@ const RecordList = (props: RecordListPropType) => {
   const rouletteTableState = state.rouletteTables.find(
     (item) => item.id === tableId
   );
-
+  const recordInOrder = [...(rouletteTableState?.record || [])].reverse();
   const handleDeleteRecord = () => {
     dispatch({
       type: 'DELETE_RECORD',
@@ -63,23 +63,23 @@ const RecordList = (props: RecordListPropType) => {
           <BackspaceIcon />
         </IconButton>
       </li>
-      {rouletteTableState?.record
+      {/* {rouletteTableState?.record
         .slice(0)
-        .reverse()
-        .map((data, index) => {
-          return (
-            <li key={index}>
-              <Chip
-                label={data.num}
-                className={classes.chip}
-                style={{
-                  backgroundColor: data.color,
-                  color: '#fff',
-                }}
-              />
-            </li>
-          );
-        })}
+        .reverse() */}
+      {recordInOrder.map((data, index) => {
+        return (
+          <li key={index}>
+            <Chip
+              label={data.num}
+              className={classes.chip}
+              style={{
+                backgroundColor: data.color,
+                color: '#fff',
+              }}
+            />
+          </li>
+        );
+      })}
     </Paper>
   );
 };
