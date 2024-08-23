@@ -1,8 +1,10 @@
 import { Grid } from '@mui/material';
 import {
   columnNumbers,
+  cornerNumbers,
   lineNumbers,
   rouletteNumbers,
+  splitNumbers,
   streetNumbers,
   twelveNumbers,
 } from '@/static/staticNumbers';
@@ -11,7 +13,9 @@ import NumberBox from './NumberBox';
 import { useRouletteContext } from '@/contexts/RouletteContext';
 import { useCallback, useEffect, useState } from 'react';
 import BetBox from './BetBox';
-import { recordCount, betsCount, twoToOneBetsCount } from '@/utils/count';
+import { recordCount, twoToOneBetsCount } from '@/utils/count';
+import BetList from './BetList';
+import { percentage } from '@/utils/percentage';
 
 type RouletteTablePropType = {
   tableId: number;
@@ -26,13 +30,14 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (item) => item.id === tableId
   );
   const numberRecordState = rouletteTableState?.numberRecord;
+  const numberRecordLength = numberRecordState?.length;
 
   // const { countState, setCountState }: any = useState(
   //   recordCount(numberRecordState)
   // );
   const betCount = recordCount(numberRecordState);
   const twoToOneCounts = twoToOneBetsCount(numberRecordState);
-  console.log(twoToOneCounts);
+  console.log(betCount);
 
   const renderNumber = useCallback(
     (data: any, index: number) => {
@@ -51,10 +56,11 @@ export default function RouletteTable(props: RouletteTablePropType) {
           color={data.color}
           handleAddRecord={handleAddRecord}
           count={betCount?.numberCount[numCountIdx]}
+          listLength={numberRecordLength}
         />
       );
     },
-    [isAddRecord, betCount]
+    [isAddRecord, betCount, numberRecordLength]
   );
   const renderTwelveNum = useCallback(
     (data: any, index: number) => {
@@ -73,7 +79,13 @@ export default function RouletteTable(props: RouletteTablePropType) {
         default:
           break;
       }
-      return <BetBox title={title} count={count[index]} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          listLength={numberRecordLength}
+        />
+      );
     },
     [betCount]
   );
@@ -82,7 +94,13 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (data: any, index: number) => {
       let title = `line ${index + 1}`;
       const count = betCount['lineNumbers'];
-      return <BetBox title={title} count={count[index]} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          listLength={numberRecordLength}
+        />
+      );
     },
     [betCount]
   );
@@ -91,7 +109,13 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (data: any, index: number) => {
       let title = `str ${index + 1}`;
       const count = betCount['streetNumbers'];
-      return <BetBox title={title} count={count[index]} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          listLength={numberRecordLength}
+        />
+      );
     },
     [betCount]
   );
@@ -99,7 +123,13 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (data: any, index: number) => {
       let title = `Col ${index + 1}`;
       const count = betCount['columnNumbers'];
-      return <BetBox title={title} count={count[index]} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          listLength={numberRecordLength}
+        />
+      );
     },
     [betCount]
   );
@@ -107,7 +137,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (title: string, bgColor: string) => {
       const count = twoToOneCounts.redBlackBet;
       const index = title === 'Red' ? 0 : 1;
-      return <BetBox title={title} count={count[index]} bgColor={bgColor} />;
+      return <BetBox title={title} count={[count[index]]} bgColor={bgColor} />;
     },
     [twoToOneCounts]
   );
@@ -115,7 +145,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (title: string) => {
       const count = twoToOneCounts.oddEvenBet;
       const index = title === 'Odd' ? 0 : 1;
-      return <BetBox title={title} count={count[index]} />;
+      return <BetBox title={title} count={[count[index]]} />;
     },
     [twoToOneCounts]
   );
@@ -123,7 +153,35 @@ export default function RouletteTable(props: RouletteTablePropType) {
     (title: string) => {
       const count = twoToOneCounts.eighteenNumBet;
       const index = title === '1 to 18' ? 0 : 1;
-      return <BetBox title={title} count={count[index]} />;
+      return <BetBox title={title} count={[count[index]]} />;
+    },
+    [twoToOneCounts]
+  );
+  const renderBetList = useCallback(
+    (count: number[][], BetNameList: number[][]) => {
+      const columns = [
+        {
+          field: 'id',
+          flex: 1,
+        },
+        {
+          field: 'Consecutive',
+          flex: 0.5,
+        },
+        {
+          field: 'Hit Rate',
+          flex: 0.6,
+        },
+      ];
+      const rows = count.map((countItem, index) => {
+        const item = {
+          id: BetNameList[index],
+          Consecutive: countItem[0],
+          'Hit Rate': percentage(countItem[1], numberRecordLength || 0),
+        };
+        return item;
+      });
+      return <BetList rows={rows} columns={columns} />;
     },
     [twoToOneCounts]
   );
@@ -204,6 +262,10 @@ export default function RouletteTable(props: RouletteTablePropType) {
               {renderEighteenNumBet('19 to 36')}
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          {renderBetList(betCount.cornerNumbers, cornerNumbers)}
+          {renderBetList(betCount.splitNumbers, splitNumbers)}
         </Grid>
       </Grid>
     </>

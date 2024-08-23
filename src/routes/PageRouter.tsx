@@ -1,5 +1,7 @@
 
+import HeaderLayout from '@/components/HeaderLayout';
 import Home from '@/pages/Home';
+import Setting from '@/pages/Setting';
 import React from 'react';
 import {
   Outlet,
@@ -11,15 +13,19 @@ import {
 interface PageRouterProps {}
 
 const PageRouter: React.FC<PageRouterProps> = () => {
-  const router = createHashRouter([
+  const router = createBrowserRouter([
     {
       path: '/',
-      element: <Outlet />,
+      element: <HeaderLayout />,
       children: [
         {
-          path: '/*',
+          path: '/',
           element: <Home />,
           // errorElement: isAuthenticated?<ForbiddenPage />:<ErrorPage/>,
+        },
+        {
+          path: '/setting',
+          element: <Setting />,
         },
       ],
     }

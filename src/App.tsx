@@ -5,7 +5,7 @@ import { RouletteProvider } from './contexts/RouletteContext';
 function App() {
   return (
     <RouletteProvider>
-      <Home />
+      <PageRouter />
     </RouletteProvider>
   );
 }
