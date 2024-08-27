@@ -7,7 +7,6 @@ import {
   Outlet,
   RouterProvider,
   createBrowserRouter,
-  createHashRouter,
 } from 'react-router-dom';
 
 interface PageRouterProps {}

@@ -11,7 +11,7 @@ import {
 import CustomGrid from './CustomGrid';
 import NumberBox from './NumberBox';
 import { useRouletteContext } from '@/contexts/RouletteContext';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import BetBox from './BetBox';
 import { recordCount, twoToOneBetsCount } from '@/utils/count';
 import BetList from './BetList';

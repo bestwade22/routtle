@@ -1,13 +1,9 @@
 // src/Tabs.tsx
 import React, {
-  Children,
   ReactNode,
   useCallback,
-  useEffect,
-  useMemo,
   useState,
 } from 'react';
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,7 +21,7 @@ interface TabPanelProps {
 }
 
 export default function DynamicTabs(props: TabPanelProps) {
-  const { children } = props;
+  const {  } = props;
   const [value, setValue] = useState('1');
   const [isAddRecord, setIsAddRecord] = useState(false);
   const { state, dispatch } = useRouletteContext();

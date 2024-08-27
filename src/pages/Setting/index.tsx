@@ -1,11 +1,9 @@
 import {
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  Switch,
 } from '@mui/material';
 import EditNotificationsIcon from '@mui/icons-material/EditNotifications';
 import { useNavigate } from 'react-router-dom';

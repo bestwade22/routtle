@@ -1,4 +1,3 @@
-import React from 'react';
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
 import NumberInput from '@/components/Common/NumberInput';
 import BackButton from '@/components/Common/Buttons/BackButton';

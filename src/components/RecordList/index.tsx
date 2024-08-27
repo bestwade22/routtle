@@ -1,9 +1,8 @@
 import { Chip, IconButton, Paper } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { useRouletteContext } from '@/contexts/RouletteContext';
 import BackspaceIcon from '@mui/icons-material/Backspace';
-import AddIcon from '@mui/icons-material/Add';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 
@@ -56,7 +55,7 @@ const RecordList = (props: RecordListPropType) => {
         <IconButton
           size="small"
           component="span"
-          onClick={(e) => {
+          onClick={() => {
             handleDeleteRecord();
           }}
         >

@@ -22,9 +22,6 @@ function NumberBox(props: NumberBoxPropsType) {
 
   const absentBg = absentBgColor(count[0], absentCheck)
 
-  const addRecord = () => {
-    console.log(num);
-  };
   return (
     <Box
       display="flex"

@@ -1,4 +1,4 @@
-import { Box, IconButton, Paper, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
