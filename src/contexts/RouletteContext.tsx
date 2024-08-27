@@ -14,7 +14,8 @@ interface rouletteTable {
 }
 interface settingsInterface {
   absentCheck: {
-    name: string;
+    id: string;
+    title: string;
     check: number[];
   }[];
 }
@@ -98,16 +99,16 @@ const rouletteReducer = (state: RouletteState, action: any) => {
         ...state,
         rouletteTables: rouletteTables,
       };
-    case 'EDIT_SETTING_CHECK':
-      const { checkNumber, betName, numIndex } = action.payload;
+    case 'UPDATE_SETTING_CHECK':
+      const { checkNumber, betId, numIndex } = action.payload;
       const betIndex = settings.absentCheck
-        .map((bet) => bet.name)
-        .indexOf(betName);
-      const newabsentCheck = settings.absentCheck;
-      newabsentCheck[betIndex].check[numIndex] = checkNumber;
+        .map((bet) => bet.id)
+        .indexOf(betId);
+      const newAbsentCheck = settings.absentCheck;
+      newAbsentCheck[betIndex].check[numIndex] = checkNumber;
       return {
         ...state,
-        settings: { ...state.settings, absentCheck: newabsentCheck },
+        settings: { ...state.settings, absentCheck: newAbsentCheck },
       };
     default:
       return state;

@@ -1,3 +1,4 @@
+import { absentBgColor } from '@/utils/absentBgColor';
 import { percentage } from '@/utils/percentage';
 import { Box } from '@mui/material';
 
@@ -5,7 +6,7 @@ interface BetBoxPropsType {
   handleClickBetBox?: Function;
   title: string;
   count?: number[];
-  noticeCount?: number;
+  absentCheck?: number[];
   bgColor?: string;
   listLength?: number;
 }
@@ -15,16 +16,10 @@ function BetBox(props: BetBoxPropsType) {
     count = [0, 0],
     bgColor,
     handleClickBetBox = () => false,
-    noticeCount = 0,
+    absentCheck = [0, 0],
     listLength = 0,
   } = props;
-
-  const bg = () => {
-    if (count[0] >= noticeCount && noticeCount > 0) {
-      return 'yellow';
-    }
-    return bgColor || '#fff';
-  };
+const absentBg = absentBgColor(count[0], absentCheck)
   return (
     <Box
       display="flex"
@@ -35,7 +30,7 @@ function BetBox(props: BetBoxPropsType) {
       alignItems="center"
       flexDirection="column"
       style={{
-        backgroundColor: bg(),
+        backgroundColor: absentBg? absentBg : bgColor,
         color: bgColor ? '#fff' : '#000',
         border: 'solid 0.5px #000',
         

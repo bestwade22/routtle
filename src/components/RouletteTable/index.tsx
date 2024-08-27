@@ -31,13 +31,15 @@ export default function RouletteTable(props: RouletteTablePropType) {
   );
   const numberRecordState = rouletteTableState?.numberRecord;
   const numberRecordLength = numberRecordState?.length;
-
+  const absentCheckState = state.settings.absentCheck;
   // const { countState, setCountState }: any = useState(
   //   recordCount(numberRecordState)
   // );
   const betCount = recordCount(numberRecordState);
   const twoToOneCounts = twoToOneBetsCount(numberRecordState);
-  console.log(betCount);
+  const getAbsentCheckState = (id: string) => {
+    return absentCheckState.find((i) => i.id === id)?.check;
+  };
 
   const renderNumber = useCallback(
     (data: any, index: number) => {
@@ -57,6 +59,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
           handleAddRecord={handleAddRecord}
           count={betCount?.numberCount[numCountIdx]}
           listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState("rouletteNumbers")}
         />
       );
     },
@@ -65,16 +68,17 @@ export default function RouletteTable(props: RouletteTablePropType) {
   const renderTwelveNum = useCallback(
     (data: any, index: number) => {
       let title = '';
-      const count = betCount['twelveNumbers'];
+      const id: string = 'twelveNumbers';
+      const count = betCount[id];
       switch (index) {
         case 0:
-          title = '1st dozens';
+          title = '1st 12';
           break;
         case 1:
-          title = '2nd dozens';
+          title = '2nd 12';
           break;
         case 2:
-          title = '3rd dozens';
+          title = '3rd 12';
           break;
         default:
           break;
@@ -84,6 +88,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
           title={title}
           count={count[index]}
           listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
         />
       );
     },
@@ -93,12 +98,14 @@ export default function RouletteTable(props: RouletteTablePropType) {
   const renderLineNum = useCallback(
     (data: any, index: number) => {
       let title = `line ${index + 1}`;
-      const count = betCount['lineNumbers'];
+      const id = 'lineNumbers';
+      const count = betCount[id];
       return (
         <BetBox
           title={title}
           count={count[index]}
           listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
         />
       );
     },
@@ -108,12 +115,14 @@ export default function RouletteTable(props: RouletteTablePropType) {
   const renderStreetNum = useCallback(
     (data: any, index: number) => {
       let title = `str ${index + 1}`;
-      const count = betCount['streetNumbers'];
+      const id = 'streetNumbers';
+      const count = betCount[id];
       return (
         <BetBox
           title={title}
           count={count[index]}
           listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
         />
       );
     },
@@ -122,12 +131,14 @@ export default function RouletteTable(props: RouletteTablePropType) {
   const renderColNum = useCallback(
     (data: any, index: number) => {
       let title = `Col ${index + 1}`;
-      const count = betCount['columnNumbers'];
+      const id = 'columnNumbers';
+      const count = betCount[id];
       return (
         <BetBox
           title={title}
           count={count[index]}
           listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
         />
       );
     },

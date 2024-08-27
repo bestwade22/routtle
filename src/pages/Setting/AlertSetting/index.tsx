@@ -1,28 +1,22 @@
 import React from 'react';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { List, ListItem, ListItemText, Typography } from '@mui/material';
 import NumberInput from '@/components/Common/NumberInput';
 import BackButton from '@/components/Common/Buttons/BackButton';
 import { useRouletteContext } from '@/contexts/RouletteContext';
 function AlertSetting() {
-  const [checked, setChecked] = React.useState(['wifi']);
   const { state, dispatch } = useRouletteContext();
   const AbsentCheckState = state.settings.absentCheck;
-  const handleToggle = (value: string) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const handleNumInputChange = (
+    value: number | null = 0,
+    index: number,
+    betId: string
+  ) => {
+    const payload = { checkNumber: value, betId: betId, numIndex: index };
+    dispatch({
+      type: 'UPDATE_SETTING_CHECK',
+      payload: payload,
+    });
   };
 
   return (
@@ -38,24 +32,34 @@ function AlertSetting() {
           <Typography
             variant="subtitle2"
             display="block"
+            bgcolor={'#C0C0C0'}
             sx={{ width: '125px', textAlign: 'center' }}
           >
-            Yellow Alert
+            Silver Alert
           </Typography>
           <Typography
             variant="subtitle2"
             display="block"
+            bgcolor={'#FFD700'}
             sx={{ width: '125px', textAlign: 'center' }}
           >
-            Red Alert
+            Gold Alert
           </Typography>
         </ListItem>
         {AbsentCheckState.map((item: any) => {
           return (
             <ListItem>
               <ListItemText primary={item.title} />
-              <NumberInput aria-label="alert yellow"  onChange={(event, val) => console.log(val)}/>
-              <NumberInput aria-label="alert red" value={item.check[1]} />
+              <NumberInput
+                aria-label="alert silver"
+                value={item.check[0]}
+                onChange={(event, val) => handleNumInputChange(val, 0, item.id)}
+              />
+              <NumberInput
+                aria-label="alert gold"
+                value={item.check[1]}
+                onChange={(event, val) => handleNumInputChange(val, 1, item.id)}
+              />
             </ListItem>
           );
         })}
