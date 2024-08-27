@@ -165,7 +165,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
           flex: 1,
         },
         {
-          field: 'Consecutive',
+          field: 'Absent',
           flex: 0.5,
         },
         {
@@ -176,7 +176,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
       const rows = count.map((countItem, index) => {
         const item = {
           id: BetNameList[index],
-          Consecutive: countItem[0],
+          Absent: countItem[0],
           'Hit Rate': percentage(countItem[1], numberRecordLength || 0),
         };
         return item;

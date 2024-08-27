@@ -19,9 +19,9 @@ export const recordCount = (record: number[] = []) => {
     //let checkNextNum = false;
     for (var bet of keyOfCounts) {
       const newBetCount = counts[bet].map((countItem: number[], i) => {
-        let newConsecutiveCount = countItem[0];
+        let newAbsentCount = countItem[0];
         let newHitCount = countItem[1];
-        const consecutiveRecordCheck =
+        const AbsentRecordCheck =
           bet === 'numberCount'
             ? recordInOrder[index] !== i
             : !staticNumbers[bet][i].includes(recordInOrder[index]);
@@ -29,14 +29,14 @@ export const recordCount = (record: number[] = []) => {
           bet === 'numberCount'
             ? recordInOrder[index] === i
             : staticNumbers[bet][i].includes(recordInOrder[index]);
-        if (consecutiveRecordCheck && countItem[0] === index) {
-          newConsecutiveCount = countItem[0] + 1;
+        if (AbsentRecordCheck && countItem[0] === index) {
+          newAbsentCount = countItem[0] + 1;
           //checkNextNum = true;
         }
         if (hitRecordCheck) {
           newHitCount = countItem[1] + 1;
         }
-        return [newConsecutiveCount, newHitCount];
+        return [newAbsentCount, newHitCount];
       });
       counts[bet] = newBetCount;
     }

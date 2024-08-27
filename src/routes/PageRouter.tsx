@@ -1,7 +1,7 @@
-
 import HeaderLayout from '@/components/HeaderLayout';
 import Home from '@/pages/Home';
 import Setting from '@/pages/Setting';
+import AlertSetting from '@/pages/Setting/AlertSetting';
 import React from 'react';
 import {
   Outlet,
@@ -25,10 +25,20 @@ const PageRouter: React.FC<PageRouterProps> = () => {
         },
         {
           path: '/setting',
-          element: <Setting />,
+          element: <Outlet />,
+          children: [
+            {
+              index: true,
+              element: <Setting />,
+            },
+            {
+              path: 'alert',
+              element: <AlertSetting />,
+            },
+          ],
         },
       ],
-    }
+    },
   ]);
 
   return <RouterProvider router={router} />;

@@ -28,7 +28,7 @@ const HeaderNav = () => {
         </IconButton>
         <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} >
           <List sx={{ width: 250 }} >
-            <ListItem onClick={() => navigator('/')}>
+            <ListItem button onClick={() => navigator('/')}>
               <ListItemText primary="Home" />
             </ListItem>
 
@@ -36,7 +36,7 @@ const HeaderNav = () => {
               <ListItemText primary="About" />
             </ListItem>
 
-            <ListItem onClick={() => navigator('/setting')}>
+            <ListItem button onClick={() => navigator('/setting')}>
               <ListItemText primary="Setting" />
             </ListItem>
           </List>

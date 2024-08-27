@@ -1,3 +1,4 @@
+import { defaultSettings } from '@/static/defaultSettings';
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 interface recordType {
@@ -11,8 +12,16 @@ interface rouletteTable {
   numberRecord: number[];
   lastNumber: number | null;
 }
+interface settingsInterface {
+  absentCheck: {
+    name: string;
+    check: number[];
+  }[];
+}
+
 interface RouletteState {
   rouletteTables: rouletteTable[];
+  settings: settingsInterface;
 }
 interface Props {
   children: React.ReactNode;
@@ -28,6 +37,7 @@ export const initialState: RouletteState = {
       lastNumber: null,
     },
   ],
+  settings: defaultSettings,
 };
 
 const RouletteContext = createContext<{
@@ -42,6 +52,7 @@ export const useRouletteContext = () => useContext(RouletteContext);
 
 const rouletteReducer = (state: RouletteState, action: any) => {
   const rouletteTables = state.rouletteTables;
+  const settings = state.settings;
   switch (action.type) {
     case 'ADD_ROULETTE_TABLE':
       const payload = action.payload;
@@ -87,7 +98,17 @@ const rouletteReducer = (state: RouletteState, action: any) => {
         ...state,
         rouletteTables: rouletteTables,
       };
-
+    case 'EDIT_SETTING_CHECK':
+      const { checkNumber, betName, numIndex } = action.payload;
+      const betIndex = settings.absentCheck
+        .map((bet) => bet.name)
+        .indexOf(betName);
+      const newabsentCheck = settings.absentCheck;
+      newabsentCheck[betIndex].check[numIndex] = checkNumber;
+      return {
+        ...state,
+        settings: { ...state.settings, absentCheck: newabsentCheck },
+      };
     default:
       return state;
   }
