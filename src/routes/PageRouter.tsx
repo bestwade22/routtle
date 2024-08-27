@@ -1,5 +1,5 @@
 import HeaderLayout from '@/components/HeaderLayout';
-import Home from '@/pages/Home';
+import Home from '@/pages/Home/index';
 import Setting from '@/pages/Setting';
 import AlertSetting from '@/pages/Setting/AlertSetting';
 import React from 'react';
