@@ -97,7 +97,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
 
   const renderLineNum = useCallback(
     (data: any, index: number) => {
-      let title = `line ${index + 1}`;
+      let title = `L${index + 1}`;
       const id = 'lineNumbers';
       const count = betCount[id];
       return (
@@ -114,7 +114,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
 
   const renderStreetNum = useCallback(
     (data: any, index: number) => {
-      let title = `str ${index + 1}`;
+      let title = `S${index + 1}`;
       const id = 'streetNumbers';
       const count = betCount[id];
       return (

@@ -1,4 +1,5 @@
 import { defaultSettings } from '@/static/defaultSettings';
+import { getCookie } from '@/utils/handleCookie';
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 interface recordType {
@@ -28,7 +29,9 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const initialState: RouletteState = {
+const cookieState = JSON.parse(getCookie('state'));
+
+export const defaultState: RouletteState = {
   rouletteTables: [
     {
       id: 1,
@@ -40,7 +43,7 @@ export const initialState: RouletteState = {
   ],
   settings: defaultSettings,
 };
-
+const initialState = cookieState ? cookieState : defaultState;
 const RouletteContext = createContext<{
   state: RouletteState;
   dispatch: React.Dispatch<any>;
@@ -101,9 +104,7 @@ const rouletteReducer = (state: RouletteState, action: any) => {
       };
     case 'UPDATE_SETTING_CHECK':
       const { checkNumber, betId, numIndex } = action.payload;
-      const betIndex = settings.absentCheck
-        .map((bet) => bet.id)
-        .indexOf(betId);
+      const betIndex = settings.absentCheck.map((bet) => bet.id).indexOf(betId);
       const newAbsentCheck = settings.absentCheck;
       newAbsentCheck[betIndex].check[numIndex] = checkNumber;
       return {
