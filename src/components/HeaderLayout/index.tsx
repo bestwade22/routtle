@@ -10,13 +10,14 @@ const HeaderLayout = () => {
   useEffect(() => {
     const onBeforeUnload = (ev: any) => {
       setCookie('state', JSON.stringify(state));
-      return ;
+      return;
     };
     window.addEventListener('beforeunload', onBeforeUnload);
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload);
     };
-  }, []);
+  }, [state]);
+
   return (
     <>
       <Header></Header>

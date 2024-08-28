@@ -30,8 +30,7 @@ interface Props {
 }
 
 const cookieState = getCookie('state');
-const cookieStateJson = cookieState? JSON.parse(getCookie('state')) : '';
-
+const cookieStateJson = cookieState ? JSON.parse(cookieState) : '';
 export const defaultState: RouletteState = {
   rouletteTables: [
     {
@@ -44,7 +43,10 @@ export const defaultState: RouletteState = {
   ],
   settings: defaultSettings,
 };
-const initialState = cookieStateJson ? cookieStateJson : defaultState;
+const initialState =
+  cookieStateJson && cookieStateJson?.rouletteTables?.length
+    ? cookieStateJson
+    : defaultState;
 const RouletteContext = createContext<{
   state: RouletteState;
   dispatch: React.Dispatch<any>;
