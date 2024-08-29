@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const HeaderNav = () => {
@@ -25,20 +25,26 @@ const HeaderNav = () => {
         >
           <MenuIcon />
         </IconButton>
-        <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} >
-          <List sx={{ width: 250 }} >
-            <ListItem button onClick={() => navigator('/')}>
-              <ListItemText primary="Home" />
-            </ListItem>
+        <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+          <Box
+            role="presentation"
+            onClick={() => setIsDrawerOpen(false)}
+            onKeyDown={() => setIsDrawerOpen(false)}
+          >
+            <List sx={{ width: 250 }}>
+              <ListItem button onClick={() => navigator('/')}>
+                <ListItemText primary="Home" />
+              </ListItem>
 
-            <ListItem button>
-              <ListItemText primary="About" />
-            </ListItem>
+              <ListItem button>
+                <ListItemText primary="About" />
+              </ListItem>
 
-            <ListItem button onClick={() => navigator('/setting')}>
-              <ListItemText primary="Setting" />
-            </ListItem>
-          </List>
+              <ListItem button onClick={() => navigator('/setting')}>
+                <ListItemText primary="Setting" />
+              </ListItem>
+            </List>
+          </Box>
         </Drawer>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Title

@@ -51,49 +51,51 @@ export const recordCount = (record: number[] = []) => {
 export const twoToOneBetsCount = (record: number[] = []) => {
   const recordInOrder = [...record].reverse();
   let counts: {
-    [key: string]: number[];
+    [key: string]: number[][];
   } = {
-    oddEvenBet: new Array(2).fill(0),
-    eighteenNumBet: new Array(2).fill(0),
-    redBlackBet: new Array(2).fill(0),
+    oddEvenBet: new Array(2).fill([0, 0]),
+    eighteenNumBet: new Array(2).fill([0, 0]),
+    redBlackBet: new Array(2).fill([0, 0]),
   };
   const keyOfCounts = Object.keys(counts);
 
   for (let index = 0; index < recordInOrder.length; index++) {
-    let checkNextNum = false;
     for (var bet of keyOfCounts) {
-      let recordCheck = false;
-
-      const newBetCount = counts[bet].map((count: number, i) => {
-        let newCount = count;
+      let absentCheck = false;
+      let hitCheck = false;
+      const newBetCount = counts[bet].map((countItem: number[], i) => {
+        let newAbsentCount = countItem[0];
+        let newHitCount = countItem[1]
         switch (bet) {
           case 'oddEvenBet':
-            recordCheck = recordInOrder[index] % 2 === i;
+            absentCheck = recordInOrder[index] % 2 === i;
+            hitCheck = !absentCheck;
             break;
           case 'eighteenNumBet':
-            recordCheck = i
+            absentCheck = i
               ? recordInOrder[index] > 18
               : recordInOrder[index] <= 18;
+            hitCheck = !absentCheck;
             break;
           case 'redBlackBet':
             const numberColor =
               rouletteNumbers[recordInOrder[index] - 1]?.color;
-            recordCheck =
+            absentCheck =
               i === 0 ? numberColor === 'black' : numberColor === 'red';
+            hitCheck = i === 0 ? numberColor === 'red' : numberColor === 'black';
             break;
           default:
             break;
         }
-        if (recordCheck && count === index) {
-          newCount = count + 1;
-          checkNextNum = true;
+        if (absentCheck && newAbsentCount === index) {
+          newAbsentCount = newAbsentCount + 1;
         }
-        return newCount;
+        if (hitCheck) {
+          newHitCount = newHitCount + 1;
+        }
+        return [newAbsentCount, newHitCount];
       });
       counts[bet] = newBetCount;
-    }
-    if (!checkNextNum) {
-      break;
     }
   }
 

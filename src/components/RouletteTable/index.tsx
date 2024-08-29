@@ -59,7 +59,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
           handleAddRecord={handleAddRecord}
           count={betCount?.numberCount[numCountIdx]}
           listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState("rouletteNumbers")}
+          absentCheck={getAbsentCheckState('rouletteNumbers')}
         />
       );
     },
@@ -146,25 +146,50 @@ export default function RouletteTable(props: RouletteTablePropType) {
   );
   const renderRedBlackBet = useCallback(
     (title: string, bgColor: string) => {
-      const count = twoToOneCounts.redBlackBet;
+      const id = 'redBlackBet';
+      const count = twoToOneCounts[id];
       const index = title === 'Red' ? 0 : 1;
-      return <BetBox title={title} count={[count[index]]} bgColor={bgColor} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          bgColor={bgColor}
+          listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
+        />
+      );
     },
     [twoToOneCounts]
   );
   const renderOddEvenBet = useCallback(
     (title: string) => {
-      const count = twoToOneCounts.oddEvenBet;
+      const id = 'oddEvenBet';
+      const count = twoToOneCounts[id];
       const index = title === 'Odd' ? 0 : 1;
-      return <BetBox title={title} count={[count[index]]} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
+        />
+      );
     },
     [twoToOneCounts]
   );
   const renderEighteenNumBet = useCallback(
     (title: string) => {
-      const count = twoToOneCounts.eighteenNumBet;
+      const id = 'eighteenNumBet';
+      const count = twoToOneCounts[id];
       const index = title === '1 to 18' ? 0 : 1;
-      return <BetBox title={title} count={[count[index]]} />;
+      return (
+        <BetBox
+          title={title}
+          count={count[index]}
+          listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(id)}
+        />
+      );
     },
     [twoToOneCounts]
   );

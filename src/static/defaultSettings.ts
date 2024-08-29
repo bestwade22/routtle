@@ -33,8 +33,23 @@ export const defaultSettings = {
     },
     {
       id: 'rouletteNumbers',
-      title: 'RouletteNumbers',
+      title: 'Roulette Numbers',
       check: [72, 108],
+    },
+    {
+      id: 'eighteenNumBet',
+      title: 'Eighteen Num Bet',
+      check: [5, 8],
+    },
+    {
+      id: 'oddEvenBet',
+      title: 'Odd Even Bet',
+      check: [5, 8],
+    },
+    {
+      id: 'redBlackBet',
+      title: 'Red Black Bet',
+      check: [5, 8],
     },
   ],
 };
