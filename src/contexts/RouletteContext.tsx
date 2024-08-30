@@ -43,10 +43,10 @@ export const defaultState: RouletteState = {
   ],
   settings: defaultSettings,
 };
-const initialState =
-  cookieStateJson && cookieStateJson?.rouletteTables?.length
-    ? cookieStateJson
-    : defaultState;
+const initialState = defaultState
+  // cookieStateJson && cookieStateJson?.rouletteTables?.length
+  //   ? cookieStateJson
+  //   : defaultState;
 const RouletteContext = createContext<{
   state: RouletteState;
   dispatch: React.Dispatch<any>;
