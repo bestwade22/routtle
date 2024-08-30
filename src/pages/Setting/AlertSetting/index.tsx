@@ -45,9 +45,12 @@ function AlertSetting() {
             Gold Alert
           </Typography>
         </ListItem>
-        {AbsentCheckState.map((item: any) => {
+        {AbsentCheckState.map((item: any, index) => {
           return (
-            <ListItem>
+            <ListItem key={index}>
+              {/* <Typography variant="body2" display="block">
+                {item.title}
+              </Typography> */}
               <ListItemText primary={item.title} />
               <NumberInput
                 aria-label="alert silver"

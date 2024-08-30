@@ -25,7 +25,7 @@ function setting() {
         <ListItemIcon>
           <EditNotificationsIcon />
         </ListItemIcon>
-        <ListItemText primary="Alert Settings" />
+        <ListItemText key={'Settings'} primary="Alert Settings" />
       </ListItemButton>
     </List>
   );
