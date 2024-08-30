@@ -26,8 +26,8 @@ function AlertSetting() {
         sx={{ width: '100%', bgcolor: 'background.paper' }}
         //subheader={<ListSubheader>Alert Settings</ListSubheader>}
       >
-        <ListItem>
-          <ListItemText id="switch-list-label-bluetooth" primary="" />
+        <ListItem key={'header'}>
+          <ListItemText key={'header'} id="header" primary="" />
           <Typography
             variant="subtitle2"
             display="block"
@@ -51,7 +51,7 @@ function AlertSetting() {
               {/* <Typography variant="body2" display="block">
                 {item.title}
               </Typography> */}
-              <ListItemText primary={item.title} />
+              <ListItemText key={index} primary={item.title} />
               <NumberInput
                 aria-label="alert silver"
                 value={item.check[0]}
