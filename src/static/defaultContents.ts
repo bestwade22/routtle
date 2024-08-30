@@ -1,3 +1,13 @@
+export const defaultRouletteTable = [
+  {
+    id: 1,
+    title: 'Table 1',
+    record: [],
+    numberRecord: [],
+    lastNumber: null,
+  },
+]
+
 export const defaultSettings = {
   absentCheck: [
     {

@@ -1,4 +1,4 @@
-import { defaultDialog, defaultSettings } from '@/static/defaultContents';
+import { defaultDialog, defaultRouletteTable, defaultSettings } from '@/static/defaultContents';
 import { getCookie } from '@/utils/handleCookie';
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
@@ -36,20 +36,27 @@ interface Props {
 
 const cookieState = getCookie('state');
 const cookieStateJson = cookieState ? JSON.parse(cookieState) : '';
-export const defaultState: RouletteState = {
-  rouletteTables: [
-    {
-      id: 1,
-      title: 'Table 1',
-      record: [],
-      numberRecord: [],
-      lastNumber: null,
-    },
-  ],
-  settings: defaultSettings,
+// export const defaultState: RouletteState = {
+//   rouletteTables: [
+//     {
+//       id: 1,
+//       title: 'Table 1',
+//       record: [],
+//       numberRecord: [],
+//       lastNumber: null,
+//     },
+//   ],
+//   settings: defaultSettings,
+//   dialog: defaultDialog,
+// };
+
+const initialState: RouletteState = {
+  rouletteTables: cookieStateJson?.rouletteTables?.length? cookieStateJson?.rouletteTables : defaultRouletteTable,
+  settings: {...defaultSettings, ...cookieStateJson?.settings},
   dialog: defaultDialog,
-};
-const initialState = defaultState
+}
+
+//const initialState = defaultState
   // cookieStateJson && cookieStateJson?.rouletteTables?.length
   //   ? cookieStateJson
   //   : defaultState;
