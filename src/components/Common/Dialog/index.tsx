@@ -23,7 +23,7 @@ export default function CustomizedDialogs() {
   const handleClose = () => {
     const payload = { stateName: 'dialog', value: defaultDialog };
     dispatch({
-      type: 'UPDATE_SETTING_CHECK',
+      type: 'UPDATE_STATE',
       payload: payload,
     });
   };

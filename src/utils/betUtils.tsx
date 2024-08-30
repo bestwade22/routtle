@@ -1,3 +1,5 @@
+import { percentage } from "./percentage";
+
 export const betTitle = (betId: string, index: number) => {
   let title = '';
 
@@ -26,12 +28,31 @@ export const betTitle = (betId: string, index: number) => {
     case 'columnNumbers':
       title = `Col ${index + 1}`;
       break;
-    case 'lineNumbers':
-      title = `L${index + 1}`;
-      break;
-
     default:
       break;
   }
   return title;
+};
+
+
+export const betProbability = (betId: string) => {
+  let probability = '0%';
+
+  switch (betId) {
+    case 'twelveNumbers':
+      probability = percentage(12, 37)
+      break;
+    case 'lineNumbers':
+      probability = percentage(6, 37)
+      break;
+    case 'streetNumbers':
+      probability = percentage(3, 37)
+      break;
+    case 'columnNumbers':
+      probability = percentage(12, 37)
+      break;
+    default:
+      break;
+  }
+  return probability;
 };

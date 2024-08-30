@@ -16,7 +16,8 @@ import BetBox from './BetBox';
 import { recordCount, twoToOneBetsCount } from '@/utils/count';
 import BetList from './BetList';
 import { percentage } from '@/utils/percentage';
-import { betTitle } from '@/utils/betTitle';
+import { betTitle } from '@/utils/betUtils';
+import BetCard from './BetCard';
 
 type RouletteTablePropType = {
   tableId: number;
@@ -38,12 +39,30 @@ export default function RouletteTable(props: RouletteTablePropType) {
   // );
   const betCount = recordCount(numberRecordState);
   const twoToOneCounts = twoToOneBetsCount(numberRecordState);
-  console.log(twoToOneCounts)
+  console.log(twoToOneCounts);
   const getAbsentCheckState = (id: string) => {
     return absentCheckState.find((i) => i.id === id)?.check;
   };
-  const handleClickBetBox = () => {
-    return false;
+  const handleClickBetBox = ({
+    title,
+    count,
+    betId,
+  }: {
+    title: string;
+    count: number[];
+    betId: string;
+  }) => {
+    const payload = {
+      stateName: 'dialog',
+      value: {
+        content: <BetCard title={title} betId={betId} records={numberRecordState} betCount={count}/>,
+        enable: true,
+      },
+    };
+    dispatch({
+      type: 'UPDATE_STATE',
+      payload: payload,
+    });
   };
   const renderNumber = useCallback(
     ({ data, index }: { data: any; index: number }) => {
@@ -70,7 +89,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
     [isAddRecord, betCount, numberRecordLength]
   );
   const renderBets = useCallback(
-    ({ betId, data, index }: { betId: string; data: any; index: number }) => {
+    ({ betId, index }: { betId: string; index: number }) => {
       let title = betTitle(betId, index);
       const id = betId;
       const count = betCount[id];
@@ -80,12 +99,17 @@ export default function RouletteTable(props: RouletteTablePropType) {
           count={count[index]}
           listLength={numberRecordLength}
           absentCheck={getAbsentCheckState(id)}
+          handleClickBetBox={() => handleClickBetBox({
+            title,
+            count: count[index],
+            betId,
+          })}
         />
       );
     },
     [betCount]
   );
-  
+
   const renderRedBlackBet = useCallback(
     (title: string, bgColor: string) => {
       const id = 'redBlackBet';

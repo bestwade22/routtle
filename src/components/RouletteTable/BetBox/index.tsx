@@ -19,7 +19,7 @@ function BetBox(props: BetBoxPropsType) {
     absentCheck = [0, 0],
     listLength = 0,
   } = props;
-const absentBg = absentBgColor(count[0], absentCheck)
+  const absentBg = absentBgColor(count[0], absentCheck);
 
   return (
     <Box
@@ -31,17 +31,19 @@ const absentBg = absentBgColor(count[0], absentCheck)
       alignItems="center"
       flexDirection="column"
       style={{
-        backgroundColor: absentBg? absentBg : bgColor,
+        backgroundColor: absentBg ? absentBg : bgColor,
         color: bgColor ? '#fff' : '#000',
         border: 'solid 0.5px #000',
-        
       }}
       onClick={() => handleClickBetBox()}
     >
       <Box fontSize={'0.8rem'}>
-        {title}{` (${count[0]}) `}
+        {title}
+        {` (${count[0]}) `}
       </Box>
-      <Box fontSize={'0.7rem'}>{listLength ? `[${percentage(count[1], listLength)}]` : ''}</Box>
+      <Box fontSize={'0.7rem'}>
+        {listLength ? `[${percentage(count[1], listLength)}]` : ''}
+      </Box>
     </Box>
   );
 }
