@@ -53,3 +53,9 @@ export const defaultSettings = {
     },
   ],
 };
+
+export const defaultDialog = {
+  title: '',
+  content: '',
+  enable: false,
+}

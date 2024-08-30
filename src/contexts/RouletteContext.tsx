@@ -1,4 +1,4 @@
-import { defaultSettings } from '@/static/defaultSettings';
+import { defaultDialog, defaultSettings } from '@/static/defaultContents';
 import { getCookie } from '@/utils/handleCookie';
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
@@ -20,10 +20,15 @@ interface settingsInterface {
     check: number[];
   }[];
 }
-
+interface dialogInterface {
+  title: string,
+  content: any,
+  enable: boolean,
+}
 interface RouletteState {
   rouletteTables: rouletteTable[];
   settings: settingsInterface;
+  dialog: dialogInterface,
 }
 interface Props {
   children: React.ReactNode;
@@ -42,6 +47,7 @@ export const defaultState: RouletteState = {
     },
   ],
   settings: defaultSettings,
+  dialog: defaultDialog,
 };
 const initialState = defaultState
   // cookieStateJson && cookieStateJson?.rouletteTables?.length

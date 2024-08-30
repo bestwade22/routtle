@@ -36,6 +36,10 @@ const PageRouter: React.FC<PageRouterProps> = () => {
             },
           ],
         },
+        {
+          path: '/*',
+          element: <Home />,
+        },
       ],
     },
   ]);
