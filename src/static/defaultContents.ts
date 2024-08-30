@@ -61,6 +61,16 @@ export const defaultSettings = {
       title: 'Red Black Bet',
       check: [5, 8],
     },
+    {
+      id: 'redBlackBet',
+      title: 'Red Black Bet',
+      check: [5, 8],
+    },
+    {
+      id: 'redBlackBet',
+      title: 'Red Black Bet',
+      check: [5, 8],
+    },
   ],
 };
 

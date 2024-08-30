@@ -73,8 +73,8 @@ export const twoToOneBetsCount = (record: number[] = []) => {
             break;
           case 'eighteenNumBet':
             absentCheck = i
-              ? recordInOrder[index] > 18
-              : recordInOrder[index] <= 18;
+              ? (recordInOrder[index] <= 18)
+              : (recordInOrder[index] > 18);
             hitCheck = !absentCheck;
             break;
           case 'redBlackBet':

@@ -1,4 +1,8 @@
-import { defaultDialog, defaultRouletteTable, defaultSettings } from '@/static/defaultContents';
+import {
+  defaultDialog,
+  defaultRouletteTable,
+  defaultSettings,
+} from '@/static/defaultContents';
 import { getCookie } from '@/utils/handleCookie';
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
@@ -21,14 +25,17 @@ interface settingsInterface {
   }[];
 }
 interface dialogInterface {
-  title: string,
-  content: any,
-  enable: boolean,
+  title: string;
+  content: any;
+  enable: boolean;
 }
-interface RouletteState {
+interface IObjectKeys {
+  [key: string]: any;
+}
+interface RouletteState extends IObjectKeys {
   rouletteTables: rouletteTable[];
   settings: settingsInterface;
-  dialog: dialogInterface,
+  dialog: dialogInterface;
 }
 interface Props {
   children: React.ReactNode;
@@ -51,15 +58,17 @@ const cookieStateJson = cookieState ? JSON.parse(cookieState) : '';
 // };
 
 const initialState: RouletteState = {
-  rouletteTables: cookieStateJson?.rouletteTables?.length? cookieStateJson?.rouletteTables : defaultRouletteTable,
-  settings: {...defaultSettings, ...cookieStateJson?.settings},
+  rouletteTables: cookieStateJson?.rouletteTables?.length
+    ? cookieStateJson?.rouletteTables
+    : defaultRouletteTable,
+  settings: { ...defaultSettings, ...cookieStateJson?.settings },
   dialog: defaultDialog,
-}
+};
 
 //const initialState = defaultState
-  // cookieStateJson && cookieStateJson?.rouletteTables?.length
-  //   ? cookieStateJson
-  //   : defaultState;
+// cookieStateJson && cookieStateJson?.rouletteTables?.length
+//   ? cookieStateJson
+//   : defaultState;
 const RouletteContext = createContext<{
   state: RouletteState;
   dispatch: React.Dispatch<any>;
@@ -126,6 +135,13 @@ const rouletteReducer = (state: RouletteState, action: any) => {
       return {
         ...state,
         settings: { ...state.settings, absentCheck: newAbsentCheck },
+      };
+    case 'UPDATE_STATE':
+      const { stateName, value }: { stateName: string; value: any } =
+        action.payload;
+      return {
+        ...state,
+        [stateName]: { ...state[stateName], ...value },
       };
     default:
       return state;

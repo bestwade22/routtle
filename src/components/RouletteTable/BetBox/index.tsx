@@ -20,6 +20,7 @@ function BetBox(props: BetBoxPropsType) {
     listLength = 0,
   } = props;
 const absentBg = absentBgColor(count[0], absentCheck)
+
   return (
     <Box
       display="flex"

@@ -16,6 +16,7 @@ import BetBox from './BetBox';
 import { recordCount, twoToOneBetsCount } from '@/utils/count';
 import BetList from './BetList';
 import { percentage } from '@/utils/percentage';
+import { betTitle } from '@/utils/betTitle';
 
 type RouletteTablePropType = {
   tableId: number;
@@ -37,12 +38,15 @@ export default function RouletteTable(props: RouletteTablePropType) {
   // );
   const betCount = recordCount(numberRecordState);
   const twoToOneCounts = twoToOneBetsCount(numberRecordState);
+  console.log(twoToOneCounts)
   const getAbsentCheckState = (id: string) => {
     return absentCheckState.find((i) => i.id === id)?.check;
   };
-
+  const handleClickBetBox = () => {
+    return false;
+  };
   const renderNumber = useCallback(
-    (data: any, index: number) => {
+    ({ data, index }: { data: any; index: number }) => {
       const numCountIdx = data.num === 0 ? 0 : index + 1;
       const handleAddRecord = () => {
         if (isAddRecord) {
@@ -65,40 +69,10 @@ export default function RouletteTable(props: RouletteTablePropType) {
     },
     [isAddRecord, betCount, numberRecordLength]
   );
-  const renderTwelveNum = useCallback(
-    (data: any, index: number) => {
-      let title = '';
-      const id: string = 'twelveNumbers';
-      const count = betCount[id];
-      switch (index) {
-        case 0:
-          title = '1st 12';
-          break;
-        case 1:
-          title = '2nd 12';
-          break;
-        case 2:
-          title = '3rd 12';
-          break;
-        default:
-          break;
-      }
-      return (
-        <BetBox
-          title={title}
-          count={count[index]}
-          listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState(id)}
-        />
-      );
-    },
-    [betCount]
-  );
-
-  const renderLineNum = useCallback(
-    (data: any, index: number) => {
-      let title = `L${index + 1}`;
-      const id = 'lineNumbers';
+  const renderBets = useCallback(
+    ({ betId, data, index }: { betId: string; data: any; index: number }) => {
+      let title = betTitle(betId, index);
+      const id = betId;
       const count = betCount[id];
       return (
         <BetBox
@@ -111,39 +85,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
     },
     [betCount]
   );
-
-  const renderStreetNum = useCallback(
-    (data: any, index: number) => {
-      let title = `S${index + 1}`;
-      const id = 'streetNumbers';
-      const count = betCount[id];
-      return (
-        <BetBox
-          title={title}
-          count={count[index]}
-          listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState(id)}
-        />
-      );
-    },
-    [betCount]
-  );
-  const renderColNum = useCallback(
-    (data: any, index: number) => {
-      let title = `Col ${index + 1}`;
-      const id = 'columnNumbers';
-      const count = betCount[id];
-      return (
-        <BetBox
-          title={title}
-          count={count[index]}
-          listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState(id)}
-        />
-      );
-    },
-    [betCount]
-  );
+  
   const renderRedBlackBet = useCallback(
     (title: string, bgColor: string) => {
       const id = 'redBlackBet';
@@ -235,7 +177,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
           <Grid container spacing={0}>
             <Grid item xs={4}></Grid>
             <Grid item xs={6}>
-              {renderNumber({ num: 0, color: 'green' }, 0)}
+              {renderNumber({ data: { num: 0, color: 'green' }, index: 0 })}
             </Grid>
             <Grid item xs={2}></Grid>
           </Grid>
@@ -244,11 +186,17 @@ export default function RouletteTable(props: RouletteTablePropType) {
           <CustomGrid
             list={twelveNumbers}
             column
-            renderContent={renderTwelveNum}
+            renderContent={renderBets}
+            betId="twelveNumbers"
           />
         </Grid>
         <Grid item xs={2}>
-          <CustomGrid list={lineNumbers} column renderContent={renderLineNum} />
+          <CustomGrid
+            list={lineNumbers}
+            column
+            renderContent={renderBets}
+            betId="lineNumbers"
+          />
         </Grid>
         <Grid item xs={6}>
           <CustomGrid
@@ -261,7 +209,8 @@ export default function RouletteTable(props: RouletteTablePropType) {
           <CustomGrid
             list={streetNumbers}
             column
-            renderContent={renderStreetNum}
+            renderContent={renderBets}
+            betId="streetNumbers"
           />
         </Grid>
         <Grid item xs={12}>
@@ -271,7 +220,8 @@ export default function RouletteTable(props: RouletteTablePropType) {
               <CustomGrid
                 list={columnNumbers}
                 cols={3}
-                renderContent={renderColNum}
+                renderContent={renderBets}
+                betId="columnNumbers"
               />
             </Grid>
             <Grid item xs={2}></Grid>

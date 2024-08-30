@@ -4,10 +4,19 @@ type CustomGridType = {
   list: any;
   cols?: number;
   column?: boolean;
-  renderContent?: (data: any, index: number) => JSX.Element;
+  renderContent?: ({
+    betId,
+    data,
+    index,
+  }: {
+    betId: string;
+    data: any;
+    index: number;
+  }) => JSX.Element;
+  betId?: string;
 };
 const CustomGrid = (props: CustomGridType) => {
-  const { list, cols, column = false, renderContent } = props;
+  const { list, cols, column = false, renderContent, betId = '' } = props;
   const tableCol = cols ?? list.length;
   const size = 12 / tableCol;
   const direction = column ? 'column' : 'row';
@@ -29,7 +38,7 @@ const CustomGrid = (props: CustomGridType) => {
             key={index}
             width={'100%'}
           >
-            {renderContent && renderContent(data, index)}
+            {renderContent && renderContent({ betId, data, index })}
             {/* <Box
                 height="100%"
                 display="flex"
