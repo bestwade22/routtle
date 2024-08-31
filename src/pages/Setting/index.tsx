@@ -12,7 +12,6 @@ function setting() {
   const navigator = useNavigate();
 
   const handleListOnclick = (path: string) => {
-    console.log('alert');
     navigator(path);
   };
 

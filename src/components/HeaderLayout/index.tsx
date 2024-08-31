@@ -9,8 +9,8 @@ const HeaderLayout = () => {
 
   useEffect(() => {
     const onBeforeUnload = (ev: any) => {
-      //setCookie('state', JSON.stringify(state));
-      removeCookie('state', '')
+      setCookie('state', JSON.stringify(state));
+      //removeCookie('state', '')
       return;
     };
     window.addEventListener('beforeunload', onBeforeUnload);
