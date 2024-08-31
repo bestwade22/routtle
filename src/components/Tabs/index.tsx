@@ -1,18 +1,16 @@
 // src/Tabs.tsx
-import React, {
-  ReactNode,
-  useCallback,
-  useState,
-} from 'react';
+import React, { ReactNode, useCallback, useState } from 'react';
 import Tab from '@mui/material/Tab';
-import { Box, IconButton } from '@mui/material';
+import { Box, Button, Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useRouletteContext } from '@/contexts/RouletteContext';
 import RecordList from '../RecordList';
 import RouletteTable from '../RouletteTable';
+import { defaultDialog } from '@/static/defaultContents';
 // import RouletteTable from 'components/rouletteTable';
 
 interface TabPanelProps {
@@ -21,7 +19,7 @@ interface TabPanelProps {
 }
 
 export default function DynamicTabs(props: TabPanelProps) {
-  const {  } = props;
+  const {} = props;
   const [value, setValue] = useState('1');
   const [isAddRecord, setIsAddRecord] = useState(false);
   const { state, dispatch } = useRouletteContext();
@@ -55,10 +53,38 @@ export default function DynamicTabs(props: TabPanelProps) {
         id: tableId,
       },
     });
+    dispatch({
+      type: 'UPDATE_STATE',
+      payload: {
+        stateName: 'dialog',
+        value: defaultDialog,
+      },
+    });
     if (value === tableId.toString()) {
       setValue(rouletteTablesState[0].id.toString());
     }
   };
+  const openConfirmDialog = (tableId: number) => {
+    const payload = {
+      stateName: 'dialog',
+      value: {
+        content: (
+          <Box m={4}>
+            <Box>{`Confirm remove Table${tableId}`}</Box>
+            <Button onClick={() => handleRemoveTab(tableId)}>
+              Remove
+            </Button>
+          </Box>
+        ),
+        enable: true,
+      },
+    };
+    dispatch({
+      type: 'UPDATE_STATE',
+      payload: payload,
+    });
+  };
+
   const renderRouletteTable = useCallback(
     (tableId: number) => (
       <RouletteTable tableId={tableId} isAddRecord={isAddRecord} />
@@ -87,27 +113,35 @@ export default function DynamicTabs(props: TabPanelProps) {
             aria-label="lab API tabs example"
           >
             {rouletteTablesState.map((table) => (
-              <Tab
-                key={table.id}
-                value={table.id.toString()}
-                label={
-                  <Box display="flex" alignItems="center">
-                    {table.title}
-                    <IconButton
-                      size="small"
-                      component="span"
-                      onClick={(e) => {
-                        handleRemoveTab(table.id);
-                        e.stopPropagation();
-                      }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-                }
-              />
+              <>
+                <Tab
+                  key={table.id}
+                  value={table.id.toString()}
+                  label={
+                    <Box display="flex" alignItems="center">
+                      {table.title}
+                      <IconButton
+                        size="small"
+                        component="span"
+                        onClick={(e) => {
+                          openConfirmDialog(table.id);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Box>
+                  }
+                />
+                <Divider orientation="vertical" variant="middle" flexItem />
+              </>
             ))}
-            <Tab onClick={handleAddTab} label="Add Tab" value={'remove'} />
+            <Tab
+              onClick={handleAddTab}
+              label={<AddCircleOutlineIcon />}
+              value={'remove'}
+              sx={{ minWidth: 50 }}
+            />
           </TabList>
         </Box>
         {rouletteTablesState.map((table) => (
