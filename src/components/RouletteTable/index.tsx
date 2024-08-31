@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   columnNumbers,
   cornerNumbers,
@@ -18,7 +18,6 @@ import BetList from './BetList';
 import { percentage } from '@/utils/percentage';
 import { betTitle } from '@/utils/betUtils';
 import BetCard from './BetCard';
-import { GridCellParams } from '@mui/x-data-grid';
 
 type RouletteTablePropType = {
   tableId: number;
@@ -174,12 +173,17 @@ export default function RouletteTable(props: RouletteTablePropType) {
           field: 'Hit Rate',
           flex: 0.6,
         },
+        {
+          field: 'Hit',
+          flex: 0.6,
+        },
       ];
       const rows = count.map((countItem, index) => {
         const item = {
           id: BetNameList[index],
           Absent: countItem[0],
           'Hit Rate': percentage(countItem[1], numberRecordLength || 0),
+          Hit: countItem[1],
         };
         return item;
       });
@@ -189,17 +193,11 @@ export default function RouletteTable(props: RouletteTablePropType) {
         },
       };
       return (
-        <BetList rows={rows} columns={columns} initialState={initialState} />
+        <BetList rows={rows} columns={columns} initialState={initialState} handleClickBetBox={handleClickBetBox} betId={betId}/>
       );
     },
     [twoToOneCounts]
   );
-
-  // useEffect(() => {
-  //   setCountState(recordCount(numberRecordState));
-
-  //   return () => {};
-  // }, [numberRecordState]);
 
   return (
     <>
