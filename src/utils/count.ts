@@ -53,7 +53,7 @@ export const twoToOneBetsCount = (record: number[] = []) => {
   let counts: {
     [key: string]: number[][];
   } = {
-    oddEvenBet: new Array(2).fill([0, 0]),
+    oddEventBet: new Array(2).fill([0, 0]),
     eighteenNumBet: new Array(2).fill([0, 0]),
     redBlackBet: new Array(2).fill([0, 0]),
   };
@@ -65,16 +65,16 @@ export const twoToOneBetsCount = (record: number[] = []) => {
       let hitCheck = false;
       const newBetCount = counts[bet].map((countItem: number[], i) => {
         let newAbsentCount = countItem[0];
-        let newHitCount = countItem[1]
+        let newHitCount = countItem[1];
         switch (bet) {
-          case 'oddEvenBet':
+          case 'oddEventBet':
             absentCheck = recordInOrder[index] % 2 === i;
             hitCheck = !absentCheck;
             break;
           case 'eighteenNumBet':
             absentCheck = i
-              ? (recordInOrder[index] <= 18)
-              : (recordInOrder[index] > 18);
+              ? recordInOrder[index] <= 18
+              : recordInOrder[index] > 18;
             hitCheck = !absentCheck;
             break;
           case 'redBlackBet':
@@ -82,7 +82,8 @@ export const twoToOneBetsCount = (record: number[] = []) => {
               rouletteNumbers[recordInOrder[index] - 1]?.color;
             absentCheck =
               i === 0 ? numberColor === 'black' : numberColor === 'red';
-            hitCheck = i === 0 ? numberColor === 'red' : numberColor === 'black';
+            hitCheck =
+              i === 0 ? numberColor === 'red' : numberColor === 'black';
             break;
           default:
             break;
@@ -100,4 +101,46 @@ export const twoToOneBetsCount = (record: number[] = []) => {
   }
 
   return counts;
+};
+
+export const hitCounts = (
+  record: number[] = [],
+  betId: string,
+  betIndex: number
+) => {
+  const recordInOrder = [...record].reverse();
+  const recordLength = recordInOrder.length
+  let hitCounts = [];
+  let hitCount = 0;
+  for (let index = 0; index < recordLength; index++) {
+    let hitCheck = false;
+    switch (betId) {
+      case 'oddEventBet':
+        hitCheck = recordInOrder[index] % 2 !== betIndex;
+        break;
+      case 'eighteenNumBet':
+        hitCheck = betIndex
+          ? recordInOrder[index] > 18
+          : recordInOrder[index] <= 18;
+        break;
+      case 'redBlackBet':
+        const numberColor = rouletteNumbers[recordInOrder[index] - 1]?.color;
+        hitCheck =
+          index === 0 ? numberColor === 'red' : numberColor === 'black';
+        break;
+      default:
+        hitCheck =
+          betId === 'numberCount'
+            ? recordInOrder[index] === index
+            : staticNumbers[betId][betIndex].includes(recordInOrder[index]);
+        break;
+    }
+    if (hitCheck) {
+      hitCount = hitCount + 1;
+    }
+    if ((index + 1) % 10 === 0 || (index + 1) === recordLength) {
+      hitCounts.push(hitCount)
+    }
+  }
+  return hitCounts
 };

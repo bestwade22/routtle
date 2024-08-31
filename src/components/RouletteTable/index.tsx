@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import {
   columnNumbers,
   cornerNumbers,
@@ -18,6 +18,7 @@ import BetList from './BetList';
 import { percentage } from '@/utils/percentage';
 import { betTitle } from '@/utils/betUtils';
 import BetCard from './BetCard';
+import { GridCellParams } from '@mui/x-data-grid';
 
 type RouletteTablePropType = {
   tableId: number;
@@ -47,15 +48,25 @@ export default function RouletteTable(props: RouletteTablePropType) {
     title,
     count,
     betId,
+    index,
   }: {
     title: string;
     count: number[];
     betId: string;
+    index: number;
   }) => {
     const payload = {
       stateName: 'dialog',
       value: {
-        content: <BetCard title={title} betId={betId} records={numberRecordState} betCount={count}/>,
+        content: (
+          <BetCard
+            title={title}
+            betId={betId}
+            records={numberRecordState}
+            betCount={count}
+            betIndex={index}
+          />
+        ),
         enable: true,
       },
     };
@@ -99,68 +110,48 @@ export default function RouletteTable(props: RouletteTablePropType) {
           count={count[index]}
           listLength={numberRecordLength}
           absentCheck={getAbsentCheckState(id)}
-          handleClickBetBox={() => handleClickBetBox({
-            title,
-            count: count[index],
-            betId,
-          })}
+          handleClickBetBox={() =>
+            handleClickBetBox({
+              title,
+              count: count[index],
+              betId,
+              index,
+            })
+          }
         />
       );
     },
     [betCount]
   );
 
-  const renderRedBlackBet = useCallback(
-    (title: string, bgColor: string) => {
-      const id = 'redBlackBet';
-      const count = twoToOneCounts[id];
-      const index = title === 'Red' ? 0 : 1;
+  const renderTwoToOneBet = useCallback(
+    (betId: string, title: string) => {
+      const count = twoToOneCounts[betId];
+      const index = ['1 to 18', 'Odd', 'Red'].includes(title) ? 0 : 1;
+      const bgColor = betId === 'redBlackBet' ? title : '';
       return (
         <BetBox
           title={title}
           count={count[index]}
+          listLength={numberRecordLength}
+          absentCheck={getAbsentCheckState(betId)}
+          handleClickBetBox={() =>
+            handleClickBetBox({
+              title,
+              count: count[index],
+              betId,
+              index,
+            })
+          }
           bgColor={bgColor}
-          listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState(id)}
-        />
-      );
-    },
-    [twoToOneCounts]
-  );
-  const renderOddEvenBet = useCallback(
-    (title: string) => {
-      const id = 'oddEvenBet';
-      const count = twoToOneCounts[id];
-      const index = title === 'Odd' ? 0 : 1;
-      return (
-        <BetBox
-          title={title}
-          count={count[index]}
-          listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState(id)}
-        />
-      );
-    },
-    [twoToOneCounts]
-  );
-  const renderEighteenNumBet = useCallback(
-    (title: string) => {
-      const id = 'eighteenNumBet';
-      const count = twoToOneCounts[id];
-      const index = title === '1 to 18' ? 0 : 1;
-      return (
-        <BetBox
-          title={title}
-          count={count[index]}
-          listLength={numberRecordLength}
-          absentCheck={getAbsentCheckState(id)}
         />
       );
     },
     [twoToOneCounts]
   );
   const renderBetList = useCallback(
-    (count: number[][], BetNameList: number[][]) => {
+    (count: number[][], BetNameList: number[][], betId: string) => {
+      const absentState = getAbsentCheckState(betId) || [];
       const columns = [
         {
           field: 'id',
@@ -169,6 +160,15 @@ export default function RouletteTable(props: RouletteTablePropType) {
         {
           field: 'Absent',
           flex: 0.5,
+          cellClassName: (params: { value: number }) => {
+            if (params.value >= absentState[1]) {
+              return 'gold';
+            }
+            if (params.value >= absentState[0]) {
+              return 'silver';
+            }
+            return '';
+          },
         },
         {
           field: 'Hit Rate',
@@ -183,7 +183,14 @@ export default function RouletteTable(props: RouletteTablePropType) {
         };
         return item;
       });
-      return <BetList rows={rows} columns={columns} />;
+      const initialState = {
+        sorting: {
+          sortModel: [{ field: 'Absent', sort: 'desc' }],
+        },
+      };
+      return (
+        <BetList rows={rows} columns={columns} initialState={initialState} />
+      );
     },
     [twoToOneCounts]
   );
@@ -254,28 +261,47 @@ export default function RouletteTable(props: RouletteTablePropType) {
         <Grid item xs={12}>
           <Grid container spacing={0}>
             <Grid item xs={2}>
-              {renderEighteenNumBet('1 to 18')}
+              {renderTwoToOneBet('eighteenNumBet', '1 to 18')}
             </Grid>
             <Grid item xs={2}>
-              {renderOddEvenBet('Odd')}
+              {renderTwoToOneBet('oddEventBet', 'Odd')}
             </Grid>
             <Grid item xs={2}>
-              {renderRedBlackBet('Red', 'red')}
+              {renderTwoToOneBet('redBlackBet', 'Red')}
             </Grid>
             <Grid item xs={2}>
-              {renderRedBlackBet('Black', 'black')}
+              {renderTwoToOneBet('redBlackBet', 'Black')}
             </Grid>
             <Grid item xs={2}>
-              {renderOddEvenBet('Event')}
+              {renderTwoToOneBet('oddEventBet', 'Event')}
             </Grid>
             <Grid item xs={2}>
-              {renderEighteenNumBet('19 to 36')}
+              {renderTwoToOneBet('eighteenNumBet', '19 to 36')}
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
-          {renderBetList(betCount.cornerNumbers, cornerNumbers)}
-          {renderBetList(betCount.splitNumbers, splitNumbers)}
+        <Grid item xs={12} mt={3}
+          sx={{
+            '& .silver': {
+              backgroundColor:  '#C0C0C0',
+            },
+            '& .gold': {
+              backgroundColor: '#FFD700',
+            },
+          }}
+        >
+          <Typography gutterBottom variant="subtitle2" component="div">
+            Corner Numbers
+          </Typography>
+          {renderBetList(
+            betCount.cornerNumbers,
+            cornerNumbers,
+            'cornerNumbers'
+          )}
+          <Typography gutterBottom variant="subtitle2" component="div">
+            Split Numbers
+          </Typography>
+          {renderBetList(betCount.splitNumbers, splitNumbers, 'splitNumbers')}
         </Grid>
       </Grid>
     </>

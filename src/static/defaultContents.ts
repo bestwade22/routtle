@@ -52,18 +52,8 @@ export const defaultSettings = {
       check: [5, 8],
     },
     {
-      id: 'oddEvenBet',
+      id: 'oddEventBet',
       title: 'Odd Even Bet',
-      check: [5, 8],
-    },
-    {
-      id: 'redBlackBet',
-      title: 'Red Black Bet',
-      check: [5, 8],
-    },
-    {
-      id: 'redBlackBet',
-      title: 'Red Black Bet',
       check: [5, 8],
     },
     {

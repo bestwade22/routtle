@@ -2,13 +2,14 @@ import { DataGrid } from '@mui/x-data-grid';
 type BetListType = {
   rows: any;
   columns: any;
+  initialState?: any;
 };
 
 function BetList(props: BetListType) {
-  const { rows, columns } = props;
+  const { rows, columns, initialState } = props;
   return (
     <div style={{ height: '15rem', width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} />
+      <DataGrid rows={rows} columns={columns} initialState={initialState}/>
     </div>
     // <List
     //   sx={{
