@@ -42,6 +42,7 @@ interface Props {
 }
 
 const cookieState = getCookie('state');
+alert(cookieState)
 const cookieStateJson = cookieState ? JSON.parse(cookieState) : '';
 // export const defaultState: RouletteState = {
 //   rouletteTables: [
