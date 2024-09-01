@@ -71,9 +71,7 @@ export default function DynamicTabs(props: TabPanelProps) {
         content: (
           <Box m={4}>
             <Box>{`Confirm remove Table${tableId}`}</Box>
-            <Button onClick={() => handleRemoveTab(tableId)}>
-              Remove
-            </Button>
+            <Button onClick={() => handleRemoveTab(tableId)}>Remove</Button>
           </Box>
         ),
         enable: true,
@@ -113,29 +111,27 @@ export default function DynamicTabs(props: TabPanelProps) {
             aria-label="lab API tabs example"
           >
             {rouletteTablesState.map((table) => (
-              <>
-                <Tab
-                  key={table.id}
-                  value={table.id.toString()}
-                  label={
-                    <Box display="flex" alignItems="center">
-                      {table.title}
-                      <IconButton
-                        size="small"
-                        component="span"
-                        onClick={(e) => {
-                          openConfirmDialog(table.id);
-                          e.stopPropagation();
-                        }}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  }
-                />
-                <Divider orientation="vertical" variant="middle" flexItem />
-              </>
+              <Tab
+                key={table.id}
+                value={table.id.toString()}
+                label={
+                  <Box display="flex" alignItems="center">
+                    {table.title}
+                    <IconButton
+                      size="small"
+                      component="span"
+                      onClick={(e) => {
+                        openConfirmDialog(table.id);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                }
+              />
             ))}
+            <Divider orientation="vertical" variant="middle" flexItem />
             <Tab
               onClick={handleAddTab}
               label={<AddCircleOutlineIcon />}
