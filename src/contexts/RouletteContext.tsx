@@ -41,6 +41,8 @@ interface Props {
   children: React.ReactNode;
 }
 
+document.cookie = "username=John Doe";
+
 const cookieState = getCookie('state');
 alert(document.cookie)
 const cookieStateJson = cookieState ? JSON.parse(cookieState) : '';
