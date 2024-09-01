@@ -3,7 +3,7 @@ import {
   defaultRouletteTable,
   defaultSettings,
 } from '@/static/defaultContents';
-import { getCookie } from '@/utils/handleCookie';
+import { getCookie, jsGetCookie } from '@/utils/handleCookie';
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 interface recordType {
@@ -41,7 +41,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const cookieState = getCookie('state');
+const cookieState = jsGetCookie('state');
 //alert(document.cookie)
 const cookieStateJson = cookieState ? JSON.parse(cookieState) : '';
 // export const defaultState: RouletteState = {

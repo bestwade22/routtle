@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import { useRouletteContext } from '@/contexts/RouletteContext';
-import { jsEraseCookie, removeCookie, setCookie } from '@/utils/handleCookie';
+import { jsEraseCookie, jsSetCookie, removeCookie, setCookie } from '@/utils/handleCookie';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -9,10 +9,10 @@ const HeaderLayout = () => {
 
   useEffect(() => {
     const onBeforeUnload = (ev: any) => {
-      //setCookie('state', JSON.stringify(state));
+      jsSetCookie('state', JSON.stringify(state),7);
       //removeCookie('state', '')
-      jsEraseCookie('state')
-      jsEraseCookie('username')
+      //jsEraseCookie('state')
+      //jsEraseCookie('username')
       return;
     };
     window.addEventListener('beforeunload', onBeforeUnload);
