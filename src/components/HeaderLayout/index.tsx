@@ -1,6 +1,11 @@
 import Header from '@/components/Header';
 import { useRouletteContext } from '@/contexts/RouletteContext';
-import { jsEraseCookie, jsSetCookie, removeCookie, setCookie } from '@/utils/handleCookie';
+import {
+  jsEraseCookie,
+  jsSetCookie,
+  removeCookie,
+  setCookie,
+} from '@/utils/handleCookie';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -8,16 +13,20 @@ const HeaderLayout = () => {
   const { state, dispatch } = useRouletteContext();
 
   useEffect(() => {
+    var isOnIOS =
+      navigator.userAgent.match(/iPad/i) ||
+      navigator.userAgent.match(/iPhone/i);
+    var eventName = isOnIOS ? 'pagehide' : 'beforeunload';
     const onBeforeUnload = (ev: any) => {
-      jsSetCookie('state', JSON.stringify(state),7);
-      //removeCookie('state', '')
+      setCookie('state', JSON.stringify(state));
+      removeCookie('username', '')
       //jsEraseCookie('state')
       //jsEraseCookie('username')
       return;
     };
-    window.addEventListener('beforeunload', onBeforeUnload);
+    window.addEventListener(eventName, onBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', onBeforeUnload);
+      window.removeEventListener(eventName, onBeforeUnload);
     };
   }, [state]);
 
