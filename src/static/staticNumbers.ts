@@ -39,7 +39,7 @@ export const rouletteNumbers = [
 export const columnNumbers = [
   [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34],
   [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
-  [3, 6, 9, 12, 15, 18, 21, 24, 25, 30, 33, 36],
+  [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
 ];
 export const twelveNumbers = [
   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -70,6 +70,9 @@ export const streetNumbers = [
 ];
 
 export const splitNumbers = [
+  [0, 1],
+  [0, 2],
+  [0, 3],
   [1, 2],
   [2, 3],
   [4, 5],

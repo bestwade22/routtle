@@ -53,7 +53,7 @@ export const twoToOneBetsCount = (record: number[] = []) => {
   let counts: {
     [key: string]: number[][];
   } = {
-    oddEventBet: new Array(2).fill([0, 0]),
+    oddEvenBet: new Array(2).fill([0, 0]),
     eighteenNumBet: new Array(2).fill([0, 0]),
     redBlackBet: new Array(2).fill([0, 0]),
   };
@@ -66,8 +66,11 @@ export const twoToOneBetsCount = (record: number[] = []) => {
       const newBetCount = counts[bet].map((countItem: number[], i) => {
         let newAbsentCount = countItem[0];
         let newHitCount = countItem[1];
+        if(recordInOrder[index] === 0){
+          return [++newAbsentCount, newHitCount]
+        }
         switch (bet) {
-          case 'oddEventBet':
+          case 'oddEvenBet':
             absentCheck = recordInOrder[index] % 2 === i;
             hitCheck = !absentCheck;
             break;
@@ -109,13 +112,13 @@ export const hitCounts = (
   betIndex: number
 ) => {
   const recordInOrder = [...record].reverse();
-  const recordLength = recordInOrder.length
+  const recordLength = recordInOrder.length;
   let hitCounts = [];
   let hitCount = 0;
   for (let index = 0; index < recordLength; index++) {
     let hitCheck = false;
     switch (betId) {
-      case 'oddEventBet':
+      case 'oddEvenBet':
         hitCheck = recordInOrder[index] % 2 !== betIndex;
         break;
       case 'eighteenNumBet':
@@ -138,9 +141,9 @@ export const hitCounts = (
     if (hitCheck) {
       hitCount = hitCount + 1;
     }
-    if ((index + 1) % 10 === 0 || (index + 1) === recordLength) {
-      hitCounts.push(hitCount)
+    if ((index + 1) % 10 === 0 || index + 1 === recordLength) {
+      hitCounts.push(hitCount);
     }
   }
-  return hitCounts
+  return hitCounts;
 };

@@ -262,7 +262,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
               {renderTwoToOneBet('eighteenNumBet', '1 to 18')}
             </Grid>
             <Grid item xs={2}>
-              {renderTwoToOneBet('oddEventBet', 'Odd')}
+              {renderTwoToOneBet('oddEvenBet', 'Odd')}
             </Grid>
             <Grid item xs={2}>
               {renderTwoToOneBet('redBlackBet', 'Red')}
@@ -271,7 +271,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
               {renderTwoToOneBet('redBlackBet', 'Black')}
             </Grid>
             <Grid item xs={2}>
-              {renderTwoToOneBet('oddEventBet', 'Event')}
+              {renderTwoToOneBet('oddEvenBet', 'Even')}
             </Grid>
             <Grid item xs={2}>
               {renderTwoToOneBet('eighteenNumBet', '19 to 36')}

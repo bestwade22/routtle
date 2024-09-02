@@ -87,7 +87,7 @@ export const betCalculator = (betId: string) => {
         hitRate: 18 / 37,
       };
       break;
-    case 'oddEventBet':
+    case 'oddEvenBet':
       result = {
         percentage: percentage(18, 37),
         missRate: 19 / 37,

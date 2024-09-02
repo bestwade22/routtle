@@ -52,7 +52,7 @@ export const defaultSettings = {
       check: [5, 8],
     },
     {
-      id: 'oddEventBet',
+      id: 'oddEvenBet',
       title: 'Odd Even Bet',
       check: [5, 8],
     },
