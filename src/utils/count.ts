@@ -66,9 +66,6 @@ export const twoToOneBetsCount = (record: number[] = []) => {
       const newBetCount = counts[bet].map((countItem: number[], i) => {
         let newAbsentCount = countItem[0];
         let newHitCount = countItem[1];
-        if(recordInOrder[index] === 0){
-          return [++newAbsentCount, newHitCount]
-        }
         switch (bet) {
           case 'oddEvenBet':
             absentCheck = recordInOrder[index] % 2 === i;
@@ -76,7 +73,7 @@ export const twoToOneBetsCount = (record: number[] = []) => {
             break;
           case 'eighteenNumBet':
             absentCheck = i
-              ? recordInOrder[index] <= 18
+              ? recordInOrder[index] <= 18 
               : recordInOrder[index] > 18;
             hitCheck = !absentCheck;
             break;
@@ -84,17 +81,17 @@ export const twoToOneBetsCount = (record: number[] = []) => {
             const numberColor =
               rouletteNumbers[recordInOrder[index] - 1]?.color;
             absentCheck =
-              i === 0 ? numberColor === 'black' : numberColor === 'red';
+              i === 0 ? numberColor !== 'red' : numberColor !== 'black';
             hitCheck =
-              i === 0 ? numberColor === 'red' : numberColor === 'black';
+              i === 0 ? numberColor !== 'black' : numberColor !== 'red';
             break;
           default:
             break;
         }
-        if (absentCheck && newAbsentCount === index) {
+        if ((absentCheck || recordInOrder[index] === 0) && newAbsentCount === index) {
           newAbsentCount = newAbsentCount + 1;
         }
-        if (hitCheck) {
+        if (hitCheck && recordInOrder[index] !== 0) {
           newHitCount = newHitCount + 1;
         }
         return [newAbsentCount, newHitCount];
