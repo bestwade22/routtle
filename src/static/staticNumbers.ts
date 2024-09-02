@@ -132,6 +132,8 @@ export const splitNumbers = [
   [33, 36],
 ];
 export const cornerNumbers = [
+  [0, 1, 2],
+  [0, 2, 3],
   [1, 2, 4, 5],
   [2, 3, 5, 6],
   [4, 5, 7, 8],
