@@ -11,6 +11,7 @@ import { useRouletteContext } from '@/contexts/RouletteContext';
 import RecordList from '../RecordList';
 import RouletteTable from '../RouletteTable';
 import { defaultDialog } from '@/static/defaultContents';
+import {Adsense} from '@ctrl/react-adsense';
 // import RouletteTable from 'components/rouletteTable';
 
 interface TabPanelProps {
@@ -144,6 +145,10 @@ export default function DynamicTabs(props: TabPanelProps) {
           <TabPanel key={table.id} value={table.id.toString()}>
             <Box>
               {renderRecordList(table.id)}
+              <Adsense
+                client="ca-pub-9850665117957732"
+                slot="8426802892"
+              />
               {renderRouletteTable(table.id)}
             </Box>
           </TabPanel>
