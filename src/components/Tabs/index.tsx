@@ -148,6 +148,9 @@ export default function DynamicTabs(props: TabPanelProps) {
               <Adsense
                 client="ca-pub-9850665117957732"
                 slot="8426802892"
+                style={{ display: 'block' }}
+                layout="in-article"
+                format="fluid"
               />
               {renderRouletteTable(table.id)}
             </Box>
