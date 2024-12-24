@@ -3,7 +3,7 @@ import { percentage } from '@/utils/percentage';
 import { Box } from '@mui/material';
 
 interface NumberBoxPropsType {
-  handleAddRecord: Function;
+  handleOnClick: Function;
   num: number;
   count?: number[];
   color: string;
@@ -14,7 +14,7 @@ function NumberBox(props: NumberBoxPropsType) {
   const {
     num,
     color,
-    handleAddRecord,
+    handleOnClick,
     count = [0, 0],
     listLength = 0,
     absentCheck = [0, 0],
@@ -34,7 +34,7 @@ function NumberBox(props: NumberBoxPropsType) {
         color: '#fff',
         border: 'solid 0.5px #fff',
       }}
-      onClick={() => handleAddRecord()}
+      onClick={() => handleOnClick()}
     >
       <Box fontSize={'0.8rem'}>
         {num}

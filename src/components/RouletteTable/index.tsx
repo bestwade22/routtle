@@ -77,19 +77,30 @@ export default function RouletteTable(props: RouletteTablePropType) {
   const renderNumber = useCallback(
     ({ data, index }: { data: any; index: number }) => {
       const numCountIdx = data.num === 0 ? 0 : index + 1;
-      const handleAddRecord = () => {
+      const title = `${data.num}`;
+      const betId = 'numberCount';
+      const count = betCount[betId];
+      const handleOnClick = () => {
         if (isAddRecord) {
           dispatch({
             type: 'ENTER_RECORD',
             payload: { tableId, recordItem: data },
           });
+        } else {
+          handleClickBetBox({
+            title,
+            count: count[index],
+            betId,
+            index,
+          })
         }
       };
+
       return (
         <NumberBox
           num={data.num}
           color={data.color}
-          handleAddRecord={handleAddRecord}
+          handleOnClick={handleOnClick}
           count={betCount?.numberCount[numCountIdx]}
           listLength={numberRecordLength}
           absentCheck={getAbsentCheckState('rouletteNumbers')}

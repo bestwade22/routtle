@@ -47,7 +47,6 @@ export default function DynamicTabs(props: TabPanelProps) {
   };
 
   const handleRemoveTab = (tableId: number) => {
-    console.log(tableId);
     dispatch({
       type: 'REMOVE_ROULETTE_TABLE',
       payload: {
@@ -145,15 +144,15 @@ export default function DynamicTabs(props: TabPanelProps) {
           <TabPanel key={table.id} value={table.id.toString()}>
             <Box>
               {renderRecordList(table.id)}
-              <Adsense
-                client="ca-pub-9850665117957732"
-                slot="8426802892"
-                style={{ display: 'block' }}
-                layout="in-article"
-                format="fluid"
-              />
               {renderRouletteTable(table.id)}
             </Box>
+            <Adsense
+              client="ca-pub-9850665117957732"
+              slot="8426802892"
+              style={{ display: 'block' }}
+              layout="in-article"
+              format="fluid"
+            />
           </TabPanel>
         ))}
       </TabContext>

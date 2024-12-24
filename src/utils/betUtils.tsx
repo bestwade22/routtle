@@ -38,6 +38,13 @@ export const betCalculator = (betId: string) => {
   let result = { percentage: '0%', missRate: 0, hitRate: 0 };
 
   switch (betId) {
+    case 'numberCount':
+      result = {
+        percentage: percentage(1, 37),
+        missRate: 36 / 37,
+        hitRate: 1 / 37,
+      };
+      break;
     case 'twelveNumbers':
       result = {
         percentage: percentage(12, 37),
