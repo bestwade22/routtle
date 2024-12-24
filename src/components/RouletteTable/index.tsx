@@ -89,7 +89,7 @@ export default function RouletteTable(props: RouletteTablePropType) {
         } else {
           handleClickBetBox({
             title,
-            count: count[index],
+            count: count[numCountIdx],
             betId,
             index: numCountIdx,
           })
